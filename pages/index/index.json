@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "my-home": "../home/index/index",
+    "my-product": "../product/index/index",
+    "my-knowledge": "../knowledge/index/index",
+    "my-my": "../my/index/index"
+  }
+}

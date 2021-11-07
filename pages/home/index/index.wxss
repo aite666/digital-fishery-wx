@@ -1,0 +1,23 @@
+/* .mybg {
+    background-image: url('./../../../images/mybg.jpg');
+    background-size: cover;
+    height: 436rpx;
+} */
+.num-image {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin-right: 8px;
+    margin-bottom: 2px;
+}
+.canvas {
+    height: 150px;
+    width: 100%;
+}
+.title-image {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin-right: 10px;
+    margin-bottom: 2px;
+}

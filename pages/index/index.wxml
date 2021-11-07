@@ -1,0 +1,32 @@
+<view>
+  <my-home wx:if="{{ PageCur == 'home' }}"></my-home>
+  <my-product wx:if="{{ PageCur == 'product' }}"></my-product>
+  <my-knowledge wx:if="{{ PageCur == 'knowledge' }}"></my-knowledge>
+  <my-my wx:if="{{ PageCur == 'my' }}"></my-my>
+  <view class="cu-bar tabbar bg-white shadow foot">
+    <view class="action" bindtap="NavChange" data-cur="home">
+      <view class='cuIcon-cu-image'>
+        <image src="/images/tabbar/home{{PageCur=='home'?'_cur':''}}.png"></image>
+      </view>
+      <view class="{{PageCur=='home'?'text-blue':'text-gray'}}">首页</view>
+    </view>
+    <view class="action" bindtap="NavChange" data-cur="product">
+      <view class='cuIcon-cu-image'>
+        <image src="/images/tabbar/product{{PageCur=='product'?'_cur':''}}.png"></image>
+      </view>
+      <view class="{{PageCur=='product'?'text-blue':'text-gray'}}">生产</view>
+    </view>
+    <view class="action" bindtap="NavChange" data-cur="knowledge">
+      <view class='cuIcon-cu-image'>
+        <image src="/images/tabbar/knowledge{{PageCur=='knowledge'?'_cur':''}}.png"></image>
+      </view>
+      <view class="{{PageCur=='knowledge'?'text-blue':'text-gray'}}">知识库</view>
+    </view>
+    <view class="action" bindtap="NavChange" data-cur="my">
+      <view class='cuIcon-cu-image'>
+        <image src="/images/tabbar/my{{PageCur=='my'?'_cur':''}}.png"></image>
+      </view>
+      <view class="{{PageCur=='my'?'text-blue':'text-gray'}}">我的</view>
+    </view>
+  </view>
+</view>

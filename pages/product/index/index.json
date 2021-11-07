@@ -1,0 +1,9 @@
+{
+    "component": true,
+    "usingComponents": {
+        "my-inspection": "./../inspection/inspection",
+        "my-farm": "./../farm/farm",
+        "my-storage": "./../storage/storage",
+        "my-outpond": "./../outpond/outpond"
+    }
+}

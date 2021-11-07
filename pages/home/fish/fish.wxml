@@ -1,0 +1,12 @@
+<cu-custom bgColor="bg-gradual-blue" isBack="{{true}}">
+	<view slot="backText">返回</view>
+	<view slot="content">养殖鱼类</view>
+</cu-custom>
+<view class='nav-list'>
+    <navigator hover-class='none' url="/pages/component/{{item.name}}/{{item.name}}" class="nav-li bg-{{item.color}}" wx:for="{{elements}}" wx:key="index">
+      <view class="nav-title">{{item.title}}</view>
+      <view class="nav-name">{{item.name}}</view>
+      <!-- <text class='cuIcon-{{item.icon}}'></text> -->
+      <image src="/images/fish/{{item.image}}.png"></image>
+    </navigator>
+  </view>

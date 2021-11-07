@@ -1,0 +1,49 @@
+<view class="cu-bar bg-white">
+    <view class="action border-title">
+        <text class="text-lg text-bold text-blue">区试巡查</text>
+        <text class="bg-gradual-blue" style="width:5rem"></text>
+    </view>
+</view>
+<form>
+    <view class="cu-form-group">
+        <view class="title">区块名称</view>
+        <picker bindchange="PickerChange" value="{{index}}" range="{{picker}}">
+            <view class="picker">
+                {{index?picker[index]:'请选择区块'}}
+            </view>
+        </picker>
+    </view>
+    <view class="cu-form-group">
+        <textarea maxlength="-1" disabled="{{modalName!=null}}" bindinput="textareaAInput" placeholder="请输入品种繁育指标数据"></textarea>
+    </view>
+    <view class="cu-form-group">
+        <textarea maxlength="-1" disabled="{{modalName!=null}}" bindinput="textareaAInput" placeholder="请输入环境数据"></textarea>
+    </view>
+    <view class="cu-form-group">
+        <textarea maxlength="-1" disabled="{{modalName!=null}}" bindinput="textareaAInput" placeholder="请输入品种性状描述"></textarea>
+    </view>
+    <view class="cu-bar bg-white" style="border-top: 1rpx solid #eee;">
+		<view class="action">
+			图片上传
+		</view>
+		<view class="action">
+			{{imgList.length}}/4
+		</view>
+	</view>
+    <view class="cu-form-group">
+		<view class="grid col-4 grid-square flex-sub">
+			<view class="bg-img" wx:for="{{imgList}}" wx:key="index" bindtap="ViewImage" data-url="{{imgList[index]}}">
+				<image src='{{imgList[index]}}' mode='aspectFill'></image>
+				<view class="cu-tag bg-red" catchtap="DelImg" data-index="{{index}}">
+					<text class="cuIcon-close"></text>
+				</view>
+			</view>
+			<view class="solids" bindtap="ChooseImage" wx:if="{{imgList.length<4}}">
+				<text class="cuIcon-cameraadd"></text>
+			</view>
+		</view>
+	</view>
+    <view class="cu-bar btn-group">
+        <button class="cu-btn bg-blue shadow-blur round">提交</button>
+    </view>
+</form>

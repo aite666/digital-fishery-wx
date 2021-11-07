@@ -1,0 +1,23 @@
+{
+  "devDependencies": {
+    "babel-plugin-import": "^1.13.3"
+  },
+  "name": "digital-fishery-wx",
+  "version": "1.0.0",
+  "main": ".eslintrc.js",
+  "dependencies": {
+    "@vant/weapp": "^1.9.2",
+    "_babel-plugin-import@1.13.3@babel-plugin-import": "^1.13.3",
+    "_regenerator-runtime@0.13.9@regenerator-runtime": "^0.13.9",
+    "_to-fast-properties@2.0.0@to-fast-properties": "^2.0.0",
+    "regenerator-runtime": "^0.13.9",
+    "to-fast-properties": "^2.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

@@ -1,0 +1,28 @@
+{
+    "pages": [
+        "pages/index/index",
+        "pages/home/index/index",
+        "pages/home/fish/fish",
+        "pages/home/device/device",
+        "pages/home/batch/batch",
+        "pages/product/index/index",
+        "pages/product/farm/farm",
+        "pages/product/inspection/inspection",
+        "pages/product/outpond/outpond",
+        "pages/product/storage/storage",
+        "pages/knowledge/index/index",
+        "pages/my/index/index",
+        "pages/my/about/about",
+        "pages/my/log/log"
+    ],
+    "window": {
+        "navigationBarBackgroundColor": "#39b54a",
+        "navigationBarTitleText": "Color UI",
+        "navigationStyle": "custom",
+        "navigationBarTextStyle": "white"
+    },
+    "usingComponents": {
+        "cu-custom": "/colorui/components/cu-custom"
+    },
+    "sitemapLocation": "sitemap.json"
+}

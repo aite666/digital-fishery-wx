@@ -1,0 +1,54 @@
+<view class="cu-bar bg-white">
+    <view class="action border-title">
+        <text class="text-lg text-bold text-blue">使用农资</text>
+        <text class="bg-gradual-blue" style="width:5rem"></text>
+    </view>
+</view>
+<form>
+    <view class="cu-form-group">
+        <view class="title">区块名称</view>
+        <picker bindchange="PickerChange" value="{{index}}" range="{{picker}}">
+            <view class="picker">
+                {{index?picker[index]:'请选择区块'}}
+            </view>
+        </picker>
+    </view>
+    <view class="cu-form-group">
+        <view class="title">农资类型</view>
+        <picker bindchange="PickerChange" value="{{index}}" range="{{picker}}">
+            <view class="picker">
+                {{index?picker[index]:'请选择农资类型'}}
+            </view>
+        </picker>
+    </view>
+    <view class="cu-form-group">
+        <view class="title">农资名称</view>
+        <picker bindchange="PickerChange" value="{{index}}" range="{{picker}}">
+            <view class="picker">
+                {{index?picker[index]:'请选择农资'}}
+            </view>
+        </picker>
+    </view>
+    <view class="cu-form-group">
+		<view class="title">库存数量</view>
+		<van-stepper input-width="{{stepperWidth}}" disabled></van-stepper>
+	</view>
+    <view class="cu-form-group">
+		<view class="title">数量</view>
+		<van-stepper input-width="{{stepperWidth}}"></van-stepper>
+	</view>
+    <view class="cu-form-group">
+		<view class="title">使用日期</view>
+		<picker mode="date" value="{{date}}" bindchange="DateChange">
+			<view class="picker">
+				{{date}}
+			</view>
+		</picker>
+	</view>
+    <view class="cu-form-group">
+        <textarea maxlength="-1" disabled="{{modalName!=null}}" bindinput="textareaAInput" placeholder="请输入备注"></textarea>
+    </view>
+    <view class="cu-bar btn-group">
+        <button class="cu-btn bg-blue shadow-blur round">提交</button>
+    </view>
+</form>
