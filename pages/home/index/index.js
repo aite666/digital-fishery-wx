@@ -1,3 +1,4 @@
+const app = getApp();
 var wxCharts = require("../../../utils/wxcharts.js");
 
 Component({
@@ -20,6 +21,7 @@ Component({
         // this.initCanvas('lineCanvas')
         // this.initCanvas('lineCanvas2')
         // this.initCanvas('lineCanvas3')
+        this.initData()
         this.initCanvas1()
         this.initCanvas2()
         this.initCanvas3()
@@ -58,6 +60,20 @@ Component({
     methods: {
         onLoad() {
             console.log(111);
+        },
+        initData() {
+            console.log('initData');
+            wx.request({
+                url: app.config.apiUrl + 'qrCode/1',
+                method: 'get',
+                success(res) {
+                    if (res) {
+                        console.log(res.data) // 打印查看是否请求到接口数据
+                    } else {
+                        console.log('没有数据')
+                    }
+                }
+            })
         },
         coutNum(e) {
             if (e > 1000 && e < 10000) {

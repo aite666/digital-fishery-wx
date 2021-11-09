@@ -1,7 +1,7 @@
 <cu-custom bgColor="bg-gradual-blue" isBack="{{false}}">
 	<view slot="content">生产管理</view>
 </cu-custom>
-<scroll-view scroll-x class="bg-white nav text-center fixed" style="top:84px">
+<scroll-view scroll-x class="bg-white nav text-center fixed" style="top:{{CustomBar + 4}}px">
   <view class="cu-item {{index==TabCur?'text-blue cur':''}}"wx:for="{{tabNav}}" wx:key="index" bindtap="tabSelect" data-id="{{index}}">
     {{tabNav[index]}}
   </view>

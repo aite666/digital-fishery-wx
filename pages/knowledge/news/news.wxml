@@ -1,0 +1,9 @@
+<import src="../../../wxParse/wxParse.wxml"/> 
+
+<cu-custom bgColor="bg-gradual-blue" isBack="{{true}}">
+	<view slot="backText">返回</view>
+	<view slot="content">知识库详情</view>
+</cu-custom>
+<view class="news-content">
+    <template is="wxParse" data="{{wxParseData:article.nodes}}"/>
+</view>

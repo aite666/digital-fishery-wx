@@ -1,6 +1,15 @@
 //app.js
+let config = require('./pages/js/config.js')
 App({
+  config: config,
   onLaunch: function() {
+    // 登录
+    wx.login({
+      success: res => {
+        console.log(res)
+        // 发送 res.code 到后台换取 openId, sessionKey, unionId
+      }
+    })
     // if (wx.cloud) {
     //   wx.cloud.init({
     //     traceUser: true
@@ -20,6 +29,7 @@ App({
     })
   },
   globalData: {
+    userInfo: null,
     ColorList: [{
         title: '嫣红',
         name: 'red',
