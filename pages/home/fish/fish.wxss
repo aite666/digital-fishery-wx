@@ -48,6 +48,13 @@
   margin-right: 4rpx;
 }
 
+.nav-count {
+  font-size: 28rpx;
+  text-transform: Capitalize;
+  margin-top: 20rpx;
+  position: relative;
+}
+
 .nav-name {
   font-size: 28rpx;
   text-transform: Capitalize;

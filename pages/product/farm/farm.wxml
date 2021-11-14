@@ -7,53 +7,53 @@
 <form>
     <view class="cu-form-group">
         <view class="title">区块名称</view>
-        <picker bindchange="PickerChange" value="{{index}}" range="{{picker}}">
+        <picker bindchange="blockPickerChange" value="{{blockList[blockSelected].id}}" range="{{blockList}}" range-key="name">
             <view class="picker">
-                {{index?picker[index]:'请选择区块'}}
+                {{blockSelected ? blockList[blockSelected].name : '请选择区块'}}
             </view>
         </picker>
     </view>
     <view class="cu-form-group">
         <view class="title">投放鱼类</view>
-        <picker bindchange="PickerChange" value="{{index}}" range="{{picker}}">
+        <picker bindchange="fishPickerChange" value="{{fishList[fishSelected].id}}" range="{{fishList}}" range-key="name">
             <view class="picker">
-                {{index?picker[index]:'请选择投放鱼类'}}
+                {{fishSelected ? fishList[fishSelected].name : '请选择投放鱼类'}}
             </view>
         </picker>
     </view>
     <view class="cu-form-group">
-		<view class="title">来源单位</view>
-		<input placeholder="请输入来源单位"></input>
-	</view>
+        <view class="title">来源单位</view>
+        <input bindinput="originInput" placeholder="请输入来源单位" value="{{origin}}"></input>
+    </view>
     <view class="cu-form-group">
-		<view class="title">日期选择</view>
-		<picker mode="date" value="{{date}}" bindchange="DateChange">
-			<view class="picker">
-				{{date}}
-			</view>
-		</picker>
-	</view>
+        <view class="title">日期选择</view>
+        <picker mode="date" value="{{farmDate}}" bindchange="farmDateChange">
+            <view class="picker">
+                {{farmDate}}
+            </view>
+        </picker>
+    </view>
     <view class="cu-form-group">
-		<view class="title">数量</view>
-		<van-stepper input-width="{{stepperWidth}}"></van-stepper>
-	</view>
+        <view class="title">数量</view>
+        <van-stepper min="0" input-width="{{stepperWidth}}" value="{{quantity}}" bind:change="quantityChange"></van-stepper>
+    </view>
     <view class="cu-form-group">
         <view class="title">单位</view>
-        <picker bindchange="PickerChange" value="{{index}}" range="{{picker}}">
+        <picker bindchange="unitPickerChange" value="{{unitList[unitSelected]}}" range="{{unitList}}">
             <view class="picker">
-                {{index?picker[index]:'请选择单位'}}
+                {{unitSelected ? unitList[unitSelected] : '请选择单位'}}
             </view>
         </picker>
     </view>
     <view class="cu-form-group">
-		<view class="title">单价</view>
-        <van-stepper input-width="{{stepperWidth}}"></van-stepper>
-	</view>
+        <view class="title">单价</view>
+        <van-stepper min="0" input-width="{{stepperWidth}}" value="{{unitPrice}}" bind:change="unitPriceChange"></van-stepper>
+    </view>
     <view class="cu-form-group">
-		<view class="title">金额</view>
-		<van-stepper input-width="{{stepperWidth}}"></van-stepper>
-	</view>
+        <view class="title">金额</view>
+        <van-stepper min="0" input-width="{{stepperWidth}}" value="{{amount}}" bind:change="amountChange"></van-stepper>
+    </view>
     <view class="cu-bar btn-group">
-        <button class="cu-btn bg-blue shadow-blur round">提交</button>
+        <button class="cu-btn bg-blue shadow-blur round" bindtap="onSubmit">提交</button>
     </view>
 </form>

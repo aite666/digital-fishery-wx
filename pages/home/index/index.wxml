@@ -3,40 +3,40 @@
   <view class="bg-img padding-tb-xl mybg" style="background-image: url('/images/mybg.jpg');background-size: cover;height: 436rpx;">
     <view class="padding-xl text-black">
       <view class="padding-xs text-xl text-center">
-        <picker bindchange="blockPickerChange" value="{{blockSelected}}" range="{{blockList}}">
+        <picker bindchange="blockPickerChange" value="{{blockList[blockSelected].id}}" range="{{blockList}}" range-key="name">
           <view class="picker">
             <text class="cuIcon-location lg"></text>
-            {{ blockList[blockSelected] }}
+            {{ blockList[blockSelected].name }}
             <text class="cuIcon-triangledownfill lg"></text>
           </view>
         </picker>
       </view>
       <view class="padding-xs text-xsl text-center text-shadow">
-        25<span style="font-size: 60rpx;">°C</span>
+        {{temperature}}<span style="font-size: 60rpx;">°C</span>
       </view>
       <view class="padding-xs text-center text-shadow">
-        <span style="padding-right: 10px;border-right: 1px solid black;">阴</span>
-        <span style="padding-left: 10px;">湿度 88%</span>
+        <span style="padding-right: 10px;border-right: 1px solid black;">{{weather}}</span>
+        <span style="padding-left: 10px;">湿度 {{humidity}}%</span>
       </view>
     </view>
   </view>
   <view class="padding flex text-center text-grey bg-white shadow-warp">
     <view class="flex flex-sub flex-direction solid-right">
-      <navigator hover-class='none' url="/pages/home/fish/fish">
+      <navigator hover-class='none' url="/pages/home/fish/fish?blockId={{blockId}}">
       <view class="text-xxl text-blue">{{fishCount}}</view>
       <view class="margin-top-sm">
         <image src="/images/fish.png" class="num-image"></image>养殖鱼类</view>
       </navigator>
     </view>
     <view class="flex flex-sub flex-direction solid-right">
-      <navigator hover-class='none' url="/pages/home/batch/batch">
+      <navigator hover-class='none' url="/pages/home/batch/batch?blockId={{blockId}}">
       <view class="text-xxl text-orange">{{batchCount}}</view>
       <view class="margin-top-sm">
         <image src="/images/batch.png" class="num-image"></image>投放批次</view>
       </navigator>
     </view>
     <view class="flex flex-sub flex-direction">
-      <navigator hover-class='none' url="/pages/home/device/device">
+      <navigator hover-class='none' url="/pages/home/device/device?blockId={{blockId}}">
       <view class="text-xxl text-green">{{deviceCount}}</view>
       <view class="margin-top-sm">
         <image src="/images/device.png" class="num-image"></image>监测设备</view>

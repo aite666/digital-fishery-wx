@@ -8,80 +8,22 @@
 	</view>
 </view>
 <view class="cu-list menu-avatar">
-	<view class="cu-item">
-		<!-- <view class="cu-avatar round lg" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg);"></view> -->
-		<view class="cu-avatar radius lg bg-blue" style="background-image:url('/images/fish/东星斑.png');"></view>
+	<view class="cu-item" wx:for="{{batchList}}" wx:key="index">
+		<view class="cu-avatar radius lg bg-{{item.imageColor}}" style="background-image:url('/images/fish/{{item.imageName}}.png');"></view>
 		<view class="content">
-			<view class="text-grey">220211016005657 青鱼</view>
+			<view class="text-grey">{{item.code}} {{item.productCategoryName}}</view>
 			<view class="text-gray text-sm flex">
-				<text class="text-bold">区块:</text><text class="margin-right-xs">测试区块1</text>
-				<text class="text-bold">来源单位:</text><text>测试</text>
+				<text class="text-bold">区块:</text><text class="margin-right-xs">{{item.blockName}}</text>
+				<text class="text-bold">来源单位:</text><text>{{item.origin}}</text>
 			</view>
 			<view class="text-gray text-sm flex">
-				<text class="text-bold">金额:</text><text class="margin-right-xs">100</text>
-				<text class="text-bold">单价:</text><text>10</text>
+				<text class="text-bold">金额:</text><text class="margin-right-xs">{{item.amount}}</text>
+				<text class="text-bold">单价:</text><text>{{item.unitPrice}}</text>
 			</view>
 		</view>
 		<view class="action">
-			<view class="text-grey text-xs">10-16</view>
-			<view class="cu-tag round bg-grey sm">10尾</view>
-		</view>
-	</view>
-	<view class="cu-item">
-		<!-- <view class="cu-avatar round lg" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg);"></view> -->
-		<view class="cu-avatar radius lg bg-blue" style="background-image:url('/images/fish/东星斑.png');"></view>
-		<view class="content">
-			<view class="text-grey">220211016005657 青鱼</view>
-			<view class="text-gray text-sm flex">
-				<text class="text-bold">区块:</text><text class="margin-right-xs">测试区块1</text>
-				<text class="text-bold">来源单位:</text><text>测试</text>
-			</view>
-			<view class="text-gray text-sm flex">
-				<text class="text-bold">金额:</text><text class="margin-right-xs">100</text>
-				<text class="text-bold">单价:</text><text>10</text>
-			</view>
-		</view>
-		<view class="action">
-			<view class="text-grey text-xs">10-16</view>
-			<view class="cu-tag round bg-grey sm">10尾</view>
-		</view>
-	</view>
-	<view class="cu-item">
-		<!-- <view class="cu-avatar round lg" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg);"></view> -->
-		<view class="cu-avatar radius lg bg-blue" style="background-image:url('/images/fish/东星斑.png');"></view>
-		<view class="content">
-			<view class="text-grey">220211016005657 青鱼</view>
-			<view class="text-gray text-sm flex">
-				<text class="text-bold">区块:</text><text class="margin-right-xs">测试区块1</text>
-				<text class="text-bold">来源单位:</text><text>测试</text>
-			</view>
-			<view class="text-gray text-sm flex">
-				<text class="text-bold">金额:</text><text class="margin-right-xs">100</text>
-				<text class="text-bold">单价:</text><text>10</text>
-			</view>
-		</view>
-		<view class="action">
-			<view class="text-grey text-xs">10-16</view>
-			<view class="cu-tag round bg-grey sm">10尾</view>
-		</view>
-	</view>
-	<view class="cu-item">
-		<!-- <view class="cu-avatar round lg" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg);"></view> -->
-		<view class="cu-avatar radius lg bg-blue" style="background-image:url('/images/fish/东星斑.png');"></view>
-		<view class="content">
-			<view class="text-grey">220211016005657 青鱼</view>
-			<view class="text-gray text-sm flex">
-				<text class="text-bold">区块:</text><text class="margin-right-xs">测试区块1</text>
-				<text class="text-bold">来源单位:</text><text>测试</text>
-			</view>
-			<view class="text-gray text-sm flex">
-				<text class="text-bold">金额:</text><text class="margin-right-xs">100</text>
-				<text class="text-bold">单价:</text><text>10</text>
-			</view>
-		</view>
-		<view class="action">
-			<view class="text-grey text-xs">10-16</view>
-			<view class="cu-tag round bg-grey sm">10尾</view>
+			<view class="text-grey text-xs">{{item.farmDate}}</view>
+			<view class="cu-tag round bg-grey sm">{{item.quantity + item.unit}}</view>
 		</view>
 	</view>
 </view>

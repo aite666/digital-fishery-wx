@@ -1,0 +1,38 @@
+<!-- <view>
+
+  <van-cell-group>
+    <van-field value="{{ username }}" required clearable label="用户名" icon="question-o"
+      placeholder="请输入用户名" bind:click-icon="onClickIcon"/>
+  </van-cell-group>
+  <van-cell-group>
+    <van-field value="{{ password }}" required type="password" label="密码"
+      placeholder="请输入密码" border="{{ false }}"/>
+  </van-cell-group>
+
+  <van-cell-group>
+    <van-button plain type="primary" bindtap="login">登录</van-button>
+  </van-cell-group>
+</view> -->
+<scroll-view scroll-y class="scrollPage">
+  <!-- <image src='/images/mybg.jpg' mode='widthFix' class='response'>
+  </image> -->
+  <view class="bg-img padding-tb-xl mybg" style="background-image: url('/images/mybg.jpg');background-size: cover;height: 260px;">
+      <view class="padding-xs text-center text-shadow title">
+        安吉智慧渔业
+      </view>
+  </view>
+  <view class="login-form">
+    <form>
+      <view class="cu-form-group">
+        <van-field model:value="{{ username }}" required clearable label="用户名" placeholder="请输入用户名" />
+      </view>
+      <view class="cu-form-group">
+        <van-field model:value="{{ password }}" required type="password" label="密码" placeholder="请输入密码" />
+      </view>
+    </form>
+  </view>
+  <view class="cu-bar btn-group">
+    <button class="cu-btn bg-gradual-blue shadow-blur lg" bindtap="login">提交</button>
+  </view>
+  <view class='cu-tabbar-height'></view>
+</scroll-view>

@@ -7,48 +7,51 @@
 <form>
     <view class="cu-form-group">
         <view class="title">区块名称</view>
-        <picker bindchange="PickerChange" value="{{index}}" range="{{picker}}">
+        <picker bindchange="blockPickerChange" value="{{blockList[blockSelected].id}}" range="{{blockList}}" range-key="name">
             <view class="picker">
-                {{index?picker[index]:'请选择区块'}}
+                {{blockSelected ? blockList[blockSelected].name : '请选择区块'}}
             </view>
         </picker>
     </view>
     <view class="cu-form-group">
         <view class="title">农资类型</view>
-        <picker bindchange="PickerChange" value="{{index}}" range="{{picker}}">
-            <view class="picker">
-                {{index?picker[index]:'请选择农资类型'}}
-            </view>
-        </picker>
+        <picker mode="multiSelector" bindchange="MultiChange" bindcolumnchange="MultiColumnChange" value="{{multiIndex}}"
+		 range="{{multiArray}}">
+			<view class="picker">
+				{{multiIndex[0] != null? multiArray[0][multiIndex[0]]: '请选择农资类型'}}{{multiIndex[1] != null?' / '+multiArray[1][multiIndex[1]]:''}}
+			</view>
+		</picker>
     </view>
     <view class="cu-form-group">
         <view class="title">农资名称</view>
-        <picker bindchange="PickerChange" value="{{index}}" range="{{picker}}">
+        <picker bindchange="storageNamePickerChange" value="{{storageNameList[storageNameSelected].id}}" range="{{storageNameList}}" range-key="name">
             <view class="picker">
-                {{index?picker[index]:'请选择农资'}}
+                {{storageNameSelected ? storageNameList[storageNameSelected].name : '请选择农资名称'}}
             </view>
         </picker>
     </view>
     <view class="cu-form-group">
 		<view class="title">库存数量</view>
-		<van-stepper input-width="{{stepperWidth}}" disabled></van-stepper>
+		<van-stepper class="cu-form-group-stepper" min="0" input-width="{{stepperWidth}}" value="{{storageQuantity}}" disabled></van-stepper>
+        <span class="cu-form-group-unit">{{unit}}</span>
 	</view>
     <view class="cu-form-group">
 		<view class="title">数量</view>
-		<van-stepper input-width="{{stepperWidth}}"></van-stepper>
+		<van-stepper class="cu-form-group-stepper" min="0" input-width="{{stepperWidth}}" value="{{quantity}}" bind:change="quantityChange"></van-stepper>
+        <span class="cu-form-group-unit">{{unit}}</span>
 	</view>
     <view class="cu-form-group">
 		<view class="title">使用日期</view>
-		<picker mode="date" value="{{date}}" bindchange="DateChange">
-			<view class="picker">
-				{{date}}
-			</view>
-		</picker>
+		<picker mode="date" value="{{recordDate}}" bindchange="recordDateChange">
+            <view class="picker">
+                {{recordDate}}
+            </view>
+        </picker>
 	</view>
     <view class="cu-form-group">
-        <textarea maxlength="-1" disabled="{{modalName!=null}}" bindinput="textareaAInput" placeholder="请输入备注"></textarea>
+        <textarea maxlength="-1" bindinput="remarkInput" placeholder="请输入备注"></textarea>
     </view>
     <view class="cu-bar btn-group">
-        <button class="cu-btn bg-blue shadow-blur round">提交</button>
+        <button class="cu-btn bg-blue shadow-blur round" bindtap="onSubmit">提交</button>
     </view>
 </form>

@@ -1,0 +1,13 @@
+.login-form {
+    padding: 50px 10px;
+}
+
+.cu-bar.btn-group button {
+    width: 100%;
+    max-width: 100%;
+}
+
+.title {
+    margin-top: 84px;
+    font-size: 32px;
+}

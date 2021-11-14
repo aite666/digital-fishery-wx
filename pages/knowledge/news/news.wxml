@@ -1,9 +1,18 @@
-<import src="../../../wxParse/wxParse.wxml"/> 
+<import src="../../../wxParse/wxParse.wxml" />
 
 <cu-custom bgColor="bg-gradual-blue" isBack="{{true}}">
 	<view slot="backText">返回</view>
 	<view slot="content">知识库详情</view>
 </cu-custom>
-<view class="news-content">
-    <template is="wxParse" data="{{wxParseData:article.nodes}}"/>
-</view>
+<scroll-view scroll-y class="scrollPage news-content">
+	<view class="news-title">{{ newsDetail.title }}</view>
+	<view class="news-admin">
+		<span class="news-admin-text">日期: </span>
+		<span style="margin-right: 10px;">{{newsDetail.newsDate}}</span>
+		<span class="news-admin-text">发布人: </span>
+		<span>{{ newsDetail.createUser }}</span>
+	</view>
+	<image class="news-image" src="{{newsDetail.image}}" mode="widthfix"></image>
+	<template is="wxParse" data="{{wxParseData:article.nodes}}"/>
+	<view class="cu-tabbar-height"></view>
+</scroll-view>

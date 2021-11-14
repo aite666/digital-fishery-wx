@@ -7,65 +7,65 @@
 <form>
     <view class="cu-form-group">
         <view class="title">区块名称</view>
-        <picker bindchange="PickerChange" value="{{index}}" range="{{picker}}">
+        <picker bindchange="blockPickerChange" value="{{blockList[blockSelected].id}}" range="{{blockList}}" range-key="name">
             <view class="picker">
-                {{index?picker[index]:'请选择区块'}}
+                {{blockSelected ? blockList[blockSelected].name : '请选择区块'}}
             </view>
         </picker>
     </view>
     <view class="cu-form-group">
         <view class="title">出塘鱼类</view>
-        <picker bindchange="PickerChange" value="{{index}}" range="{{picker}}">
+        <picker bindchange="fishPickerChange" value="{{fishList[fishSelected].id}}" range="{{fishList}}" range-key="name">
             <view class="picker">
-                {{index?picker[index]:'请选择出塘鱼类'}}
+                {{fishSelected ? fishList[fishSelected].name : '请选择投放鱼类'}}
             </view>
         </picker>
     </view>
     <view class="cu-form-group">
 		<view class="title">出塘日期</view>
-		<picker mode="date" value="{{date}}" bindchange="DateChange">
-			<view class="picker">
-				{{date}}
-			</view>
-		</picker>
+		<picker mode="date" value="{{outDate}}" bindchange="outDateChange">
+            <view class="picker">
+                {{outDate}}
+            </view>
+        </picker>
 	</view>
     <view class="cu-form-group">
 		<view class="title">数量</view>
-		<van-stepper input-width="{{stepperWidth}}"></van-stepper>
+		<van-stepper min="0" input-width="{{stepperWidth}}" value="{{quantity}}" bind:change="quantityChange"></van-stepper>
 	</view>
     <view class="cu-form-group">
         <view class="title">单位</view>
-        <picker bindchange="PickerChange" value="{{index}}" range="{{picker}}">
+        <picker bindchange="unitPickerChange" value="{{unitList[unitSelected]}}" range="{{unitList}}">
             <view class="picker">
-                {{index?picker[index]:'请选择单位'}}
+                {{unitSelected ? unitList[unitSelected] : '请选择单位'}}
             </view>
         </picker>
     </view>
     <view class="cu-form-group">
         <view class="title">出塘类型</view>
-        <picker bindchange="PickerChange" value="{{index}}" range="{{picker}}">
+        <picker bindchange="outTypePickerChange" value="{{outTypeList[outTypeSelected]}}" range="{{outTypeList}}">
             <view class="picker">
-                {{index?picker[index]:'请选择出塘类型'}}
+                {{outTypeSelected != null ? outTypeList[outTypeSelected] : '请选择出塘类型'}}
             </view>
         </picker>
     </view>
     <view class="cu-form-group">
 		<view class="title">单价</view>
-		<van-stepper input-width="{{stepperWidth}}"></van-stepper>
+		<van-stepper min="0" input-width="{{stepperWidth}}" value="{{unitPrice}}" bind:change="unitPriceChange"></van-stepper>
 	</view>
-    <view class="cu-form-group">
+    <view class="cu-form-group" wx:if="{{ outTypeSelected == 0 }}">
 		<view class="title">目的地</view>
-		<input placeholder="请输入目的地"></input>
+		<input bindinput="destinationInput" placeholder="请输入目的地" value="{{destination}}"></input>
 	</view>
-    <view class="cu-form-group">
+    <view class="cu-form-group" wx:if="{{ outTypeSelected == 0 }}">
 		<view class="title">客户名称</view>
-		<input placeholder="请输入客户名称"></input>
+		<input bindinput="customerInput" placeholder="请输入客户名称" value="{{customer}}"></input>
 	</view>
-    <view class="cu-form-group">
+    <view class="cu-form-group" wx:if="{{ outTypeSelected == 0 }}">
 		<view class="title">客户电话</view>
-		<input placeholder="请输入客户电话"></input>
+		<input bindinput="customerPhoneInput" placeholder="请输入客户电话" value="{{customerPhone}}"></input>
 	</view>
     <view class="cu-bar btn-group">
-        <button class="cu-btn bg-blue shadow-blur round">提交</button>
+        <button class="cu-btn bg-blue shadow-blur round" bindtap="onSubmit">提交</button>
     </view>
 </form>

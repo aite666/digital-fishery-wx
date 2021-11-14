@@ -1,5 +1,6 @@
 const app = getApp();
 var wxCharts = require("../../../utils/wxcharts.js");
+var HTTP = require("../../../utils/request.js");
 
 Component({
     options: {
@@ -8,74 +9,134 @@ Component({
     properties: {},
     data: {
         blockSelected: 0,
-        blockList: ['测试区块1', '测试区块2', '测试区块3'],
+        blockId: 0,
+        blockList: [],
+        temperature: 0,
+        weather: '',
+        humidity: 0,
+        batchCount: 0,
+        deviceCount: 0,
+        fishCount: 0,
         lineChart: null,
         lineChart2: null,
         lineChart3: null,
         lineChartDict: null,
-        batchCount: 0,
-        deviceCount: 0,
-        fishCount: 0,
     },
-    ready() {
-        // this.initCanvas('lineCanvas')
-        // this.initCanvas('lineCanvas2')
-        // this.initCanvas('lineCanvas3')
-        this.initData()
+    attached() {
+        this.getBlockList()
+        this.getWeather()
         this.initCanvas1()
         this.initCanvas2()
         this.initCanvas3()
-    },
-    attached() {
-        console.log("success")
-        let that = this;
-        wx.showLoading({
-            title: '数据加载中',
-            mask: true,
-        })
-        let i = 0;
-        numDH();
+        // let that = this;
+        // wx.showLoading({
+        //     title: '数据加载中',
+        //     mask: true,
+        // })
+        // let i = 0;
+        // numDH();
 
-        function numDH() {
-            if (i < 2) {
-                setTimeout(function () {
-                    that.setData({
-                        batchCount: i,
-                        deviceCount: i,
-                        fishCount: i
-                    })
-                    i++
-                    numDH();
-                }, 2)
-            } else {
-                that.setData({
-                    batchCount: that.coutNum(3),
-                    deviceCount: that.coutNum(4),
-                    fishCount: that.coutNum(5)
-                })
-            }
-        }
-        wx.hideLoading()
+        // function numDH() {
+        //     if (i < 2) {
+        //         setTimeout(function () {
+        //             that.setData({
+        //                 batchCount: i,
+        //                 deviceCount: i,
+        //                 fishCount: i
+        //             })
+        //             i++
+        //             numDH();
+        //         }, 2)
+        //     } else {
+        //         that.setData({
+        //             batchCount: that.countNum(3),
+        //             deviceCount: that.countNum(4),
+        //             fishCount: that.countNum(5)
+        //         })
+        //     }
+        // }
+        // wx.hideLoading()
     },
     methods: {
-        onLoad() {
-            console.log(111);
+        getBlockList() {
+            var that = this
+            let url = '/block/list?pageNum=1&pageSize=100000'
+            HTTP(url, 'get', {}).then((res) => {
+                if (res) {
+                    console.log(res.data) // 打印查看是否请求到接口数据
+                    let blockList = res.data.list
+                    that.setData({
+                        blockList: blockList,
+                        blockId: blockList[0].id
+                    })
+                    that.getStats(blockList[0].id)
+                    // 这里将blockList放入全局缓存里面
+                    wx.setStorageSync('blockList', blockList)
+                }
+            })
         },
-        initData() {
-            console.log('initData');
+        getWeather() {
+            var that = this
+            const amapApi = 'https://restapi.amap.com/v3/weather/weatherInfo'
+            const amapKey = 'c1b0fc3e2561e58f94074ab68ee341f2'
+            let url = amapApi + '?key=' + amapKey + '&extensions=base&city=330523'
             wx.request({
-                url: app.config.apiUrl + 'qrCode/1',
+                url: url,
                 method: 'get',
                 success(res) {
                     if (res) {
                         console.log(res.data) // 打印查看是否请求到接口数据
-                    } else {
-                        console.log('没有数据')
+                        let data = res.data.lives[0]
+                        that.setData({
+                            weather: data.weather,
+                            humidity: data.humidity,
+                            temperature: data.temperature,
+                        })
                     }
                 }
             })
         },
-        coutNum(e) {
+        getStats(blockId) {
+            wx.showLoading({
+                title: '数据加载中',
+                mask: true,
+            })
+            this.getProductCategoryList(blockId)
+            this.getDeviceNum(blockId)
+        },
+        getProductCategoryList(blockId) {
+            var that = this
+            let url = '/batch/listProductCategory?blockId=' + blockId
+            HTTP(url, 'get', {}).then((res) => {
+                if (res) {
+                    console.log(res.data) // 打印查看是否请求到接口数据
+                    let productCategoryNum = 0;
+                    let batchNum = 0;
+                    for (let item of res.data) {
+                        productCategoryNum += 1;
+                        batchNum += item.batchCount;
+                    }
+                    that.setData({
+                        fishCount: that.countNum(productCategoryNum),
+                        batchCount: that.countNum(batchNum),
+                    })
+                }
+            })
+        },
+        getDeviceNum(blockId) {
+            var that = this
+            let url = '/device/list?blockId=' + blockId + '&pageNum=1&pageSize=1000000'
+            HTTP(url, 'get', {}).then((res) => {
+                if (res) {
+                    console.log(res.data) // 打印查看是否请求到接口数据
+                    that.setData({
+                        deviceCount: that.countNum(res.data.total)
+                    })
+                    wx.hideLoading()
+                }
+            })
+        },
+        countNum(e) {
             if (e > 1000 && e < 10000) {
                 e = (e / 1000).toFixed(1) + 'k'
             }
@@ -333,9 +394,12 @@ Component({
         },
         blockPickerChange(e) {
             console.log(e);
+            let blockId = this.data.blockList[e.detail.value].id
             this.setData({
-                blockSelected: e.detail.value
+                blockSelected: e.detail.value,
+                blockId: blockId,
             })
+            this.getStats(blockId)
         },
     }
 })

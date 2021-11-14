@@ -4,8 +4,9 @@
 </cu-custom>
 <view class='nav-list'>
     <navigator hover-class='none' url="/pages/component/{{item.name}}/{{item.name}}" class="nav-li bg-{{item.color}}" wx:for="{{elements}}" wx:key="index">
-      <view class="nav-title">{{item.title}}</view>
-      <view class="nav-name">{{item.name}}</view>
+      <view class="nav-title">{{item.name}}</view>
+      <view class="nav-count">批次数：{{item.batchCount}}</view>
+      <view class="nav-name">{{item.batchTotal}}</view>
       <!-- <text class='cuIcon-{{item.icon}}'></text> -->
       <image src="/images/fish/{{item.image}}.png"></image>
     </navigator>

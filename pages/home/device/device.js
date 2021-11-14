@@ -1,66 +1,52 @@
-// pages/home/device/device.js
+const app = getApp();
+var HTTP = require("../../../utils/request.js");
+
 Page({
-
-    /**
-     * 页面的初始数据
-     */
     data: {
-
+        batchList: [],
+        deviceOptions: {
+            '采集设备': 'green',
+            '视频设备': 'purple',
+        },
     },
-
-    /**
-     * 生命周期函数--监听页面加载
-     */
     onLoad: function (options) {
-
+        this.getDeviceList(options.blockId)
     },
-
-    /**
-     * 生命周期函数--监听页面初次渲染完成
-     */
-    onReady: function () {
-
-    },
-
-    /**
-     * 生命周期函数--监听页面显示
-     */
-    onShow: function () {
-
-    },
-
-    /**
-     * 生命周期函数--监听页面隐藏
-     */
-    onHide: function () {
-
-    },
-
-    /**
-     * 生命周期函数--监听页面卸载
-     */
-    onUnload: function () {
-
-    },
-
-    /**
-     * 页面相关事件处理函数--监听用户下拉动作
-     */
-    onPullDownRefresh: function () {
-
-    },
-
-    /**
-     * 页面上拉触底事件的处理函数
-     */
-    onReachBottom: function () {
-
-    },
-
-    /**
-     * 用户点击右上角分享
-     */
-    onShareAppMessage: function () {
-
+    getDeviceList(blockId) {
+        var that = this
+        let url = '/device/list?blockId=' + blockId + '&pageNum=1&pageSize=10000000'
+        HTTP(url, 'get', {}).then((res) => {
+            if (res) {
+                console.log(res.data) // 打印查看是否请求到接口数据
+                let dataList = res.data.list
+                let deviceList = []
+                for (let i = 0; i < dataList.length; i++) {
+                    let data = dataList[i]
+                    let color = 'blue'
+                    let image = '设备'
+                    let statusStr = '在线'
+                    let statusColor = 'green'
+                    let deviceName = dataList[i].deviceName
+                    let deviceType = dataList[i].deviceType
+                    if (Object.keys(that.data.deviceOptions).indexOf(deviceType) > -1) {
+                        color = that.data.deviceOptions[deviceType]
+                        image = deviceType
+                    }
+                    if (data.status == 0) {
+                        statusStr = '离线'
+                        statusColor = 'grey'
+                        color = 'grey'
+                    }
+                    data['imageColor'] = color
+                    data['imageName'] = image
+                    data['statusStr'] = statusStr
+                    data['statusColor'] = statusColor
+                    deviceList.push(data)
+                }
+                that.setData({
+                    deviceList: deviceList,
+                })
+            }
+        })
     }
 })

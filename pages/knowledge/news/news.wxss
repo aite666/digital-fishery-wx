@@ -3,3 +3,31 @@
 .news-content {
     padding: 0 20px;
 }
+
+.news-title {
+    margin: 10px 0 5px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #212121;
+    text-align: center;
+}
+
+.news-admin {
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.news-admin-text {
+    color: #0355b9;
+}
+
+.news-image {
+    height: 200px;
+    width: 100%;
+    text-align: center;
+}
+
+.wxParse-p {
+    text-indent: 2em;
+    padding-left: 5px;
+}

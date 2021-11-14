@@ -1,38 +1,92 @@
+var HTTP = require("../../../utils/request.js");
+var config = require('../../js/config.js')
+var util = require('../../../utils/util.js')
+const app = getApp();
+
 Component({
     options: {
         addGlobalClass: true,
     },
     properties: {
-
     },
     data: {
-        index: null,
-        picker: ['测试区块1', '测试区块2', '测试区块3'],
+        blockSelected: 0,
+        blockId: 0,
+        blockList: [],
         imgList: [],
-        modalName: null,
+        productData: null,
+        environmentData: null,
+        characterDescription: null,
+    },
+    lifetimes: {
+        attached: function () {
+            console.log('attached')
+            let blockList = wx.getStorageSync('blockList')
+            console.log(blockList)
+            this.setData({
+                blockList: blockList
+            })
+        },
     },
     methods: {
-        PickerChange(e) {
-            console.log(e);
+        blockPickerChange(e) {
+            let blockId = this.data.blockList[e.detail.value].id
             this.setData({
-                index: e.detail.value
+                blockSelected: e.detail.value,
+                blockId: blockId,
             })
         },
         ChooseImage() {
+            var that = this
             wx.chooseImage({
                 count: 4, //默认9
                 sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
-                sourceType: ['album'], //从相册选择
+                sourceType: ['album', 'camera'], //从相册选择
                 success: (res) => {
-                    if (this.data.imgList.length != 0) {
-                        this.setData({
-                            imgList: this.data.imgList.concat(res.tempFilePaths)
-                        })
-                    } else {
-                        this.setData({
-                            imgList: res.tempFilePaths
-                        })
-                    }
+                    const tempFilePaths = res.tempFilePaths
+                    console.log(tempFilePaths)
+                    //上传图片
+                    wx.uploadFile({
+                        url: config.apiUrl + '/minio/upload',
+                        method: 'POST',
+                        filePath: tempFilePaths[0],
+                        name: 'file',
+                        formData: {},
+                        header: {
+                            'Content-Type': 'multipart/form-data',
+                            'Authorization': 'Bearer ' + wx.getStorageSync('token'),
+                        },
+                        success: function (res) {
+                            //上传成功
+                            console.log(res)
+                            var data = JSON.parse(res.data)
+                            if (data.code == 200) {
+                                let imageUrlList = [data.data.url]
+                                if (that.data.imgList.length != 0) {
+                                    that.setData({
+                                        imgList: that.data.imgList.concat(imageUrlList)
+                                    })
+                                } else {
+                                    that.setData({
+                                        imgList: imageUrlList
+                                    })
+                                }
+                            } else {
+                                wx.showToast({
+                                    title: '上传失败',
+                                    icon: 'error',
+                                    duration: 1500
+                                })
+                            }
+                        },
+                        fail: function (res) {
+                            wx.showToast({
+                                title: '上传失败',
+                                icon: 'error',
+                                duration: 1500
+                            })
+                        },
+                    })
                 }
             });
         },
@@ -44,10 +98,10 @@ Component({
         },
         DelImg(e) {
             wx.showModal({
-                title: '召唤师',
-                content: '确定要删除这段回忆吗？',
-                cancelText: '再看看',
-                confirmText: '再见',
+                title: '区试巡查',
+                content: '确定要删除图片吗？',
+                cancelText: '取消',
+                confirmText: '确定',
                 success: res => {
                     if (res.confirm) {
                         this.data.imgList.splice(e.currentTarget.dataset.index, 1);
@@ -58,10 +112,71 @@ Component({
                 }
             })
         },
-        textareaAInput(e) {
+        productDataInput(e) {
             this.setData({
-                textareaAValue: e.detail.value
+                productData: e.detail.value
             })
         },
+        environmentDataInput(e) {
+            this.setData({
+                environmentData: e.detail.value
+            })
+        },
+        characterDescriptionInput(e) {
+            this.setData({
+                characterDescription: e.detail.value
+            })
+        },
+        onSubmit() {
+            var that = this
+            wx.showModal({
+                title: '区试巡查',
+                content: '确定要提交数据吗？',
+                cancelText: '取消',
+                confirmText: '确定',
+                success: res => {
+                    if (res.confirm) {
+                        var url = '/inspection/create'
+                        var inspectionDetail = {
+                            'blockId': that.data.blockId,
+                            'inspectionTime': util.formatTime(new Date()),
+                            'productData': that.data.productData,
+                            'environmentData': that.data.environmentData,
+                            'characterDescription': that.data.characterDescription,
+                            'images': that.data.imgList.join(','),
+                            'createUser':  app.globalData.userInfo.nickName,
+                        }
+                        HTTP(url, 'post', inspectionDetail).then((res) => {
+                            console.log(res)
+                            if (res.code == 200) {
+                                wx.showToast({
+                                    title: '提交成功',
+                                    icon: 'success',
+                                    duration: 1500
+                                })
+                                that.resetForm()
+                            } else {
+                                wx.showToast({
+                                    title: '提交失败',
+                                    icon: 'error',
+                                    duration: 1500
+                                })
+                            }
+                        })
+                    }
+                }
+            })
+        },
+        resetForm() {
+            this.setData({
+                blockSelected: 0,
+                blockId: 0,
+                blockList: [],
+                imgList: [],
+                productData: null,
+                environmentData: null,
+                characterDescription: null,
+            })
+        }
     }
 })

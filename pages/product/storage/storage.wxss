@@ -1,1 +1,7 @@
-/* pages/product/storage/storage.wxss */
+.cu-form-group-unit {
+    position:absolute;
+    right: 5px;
+}
+.cu-form-group-stepper {
+    margin-right: 15px;
+}

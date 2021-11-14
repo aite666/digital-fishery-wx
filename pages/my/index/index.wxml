@@ -4,22 +4,25 @@
 <scroll-view scroll-y class="scrollPage">
   <view class="cu-list menu-avatar">
     <view class="cu-item">
-      <view class="cu-avatar radius lg" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg);"></view>
-      <view class="content">
+      <view class="cu-avatar radius lg" style="background-image:url({{userInfo.icon}});"></view>
+      <view class="content" bindtap="showModal" data-target="adminModal">
         <view class="text-grey">
-          凯尔 <text class="cuIcon-edit margin-left-xs"></text>
+          {{ userInfo.nickName }} <text class="cuIcon-edit margin-left-xs"></text>
         </view>
         <view class="text-gray text-gl flex">
-          135****0000
+          {{ userInfo.email }}
         </view>
       </view>
     </view>
   </view>
   <view class="cu-list menu card-menu margin-top-xl margin-bottom-xl shadow-lg radius">
-    <view class="cu-item arrow">
+    <view class="cu-item {{alertNum>0?'':'arrow'}}">
       <view class="content">
         <text class="cuIcon-notice text-blue"></text>
         <text class="text-grey">告警记录</text>
+      </view>
+      <view class="action" wx:if="alertNum>0">
+        <view class="cu-tag round bg-red">{{alertNum>99?"99+":alertNum}}</view>
       </view>
     </view>
     <view class="cu-item arrow">
@@ -29,23 +32,52 @@
       </view>
     </view>
     <view class="cu-item arrow">
+      <button class="cu-btn content" open-type="feedback">
+        <text class="cuIcon-writefill text-cyan"></text>
+        <text class="text-grey">意见反馈</text>
+      </button>
+    </view>
+    <view class="cu-item arrow">
+      <navigator class="content" url="/pages/my/log/log" hover-class="none">
+        <text class="cuIcon-formfill text-green"></text>
+        <text class="text-grey">更新日志</text>
+      </navigator>
+    </view>
+    <view class="cu-item arrow">
       <navigator class="content" url="/pages/my/about/about" hover-class="none">
         <image src="/images/logo.jpeg" class="png" mode="aspectFit"></image>
         <text class="text-grey">关于</text>
       </navigator>
     </view>
-    <view class="cu-item arrow">
-      <navigator class="content" url="/pages/my/log/log" hover-class="none">
-        <text class="cuIcon-formfill text-green"></text>
-        <text class="text-grey">日志</text>
-      </navigator>
-    </view>
-    <view class="cu-item arrow">
-      <button class="cu-btn content">
-        <text class="cuIcon-writefill text-cyan"></text>
-        <text class="text-grey">意见反馈</text>
-      </button>
-    </view>
   </view>
   <view class="cu-tabbar-height"></view>
 </scroll-view>
+
+<view class="cu-modal {{modalName=='adminModal'?'show':''}}">
+  <view class="cu-dialog">
+    <view class="cu-bar bg-white justify-end">
+      <view class="content">编辑用户信息</view>
+      <view class="action" bindtap="hideModal">
+        <text class="cuIcon-close text-red"></text>
+      </view>
+    </view>
+    <view class="modal-form">
+      <form>
+        <view class="cu-form-group">
+          <view class="title">用户名</view>
+          <input bindinput="nickNameInput" placeholder="请输入用户名" value="{{userInfo.nickName}}"></input>
+        </view>
+        <view class="cu-form-group">
+          <view class="title">邮箱</view>
+          <input bindinput="emailInput" placeholder="请输入邮箱" value="{{userInfo.email}}"></input>
+        </view>
+      </form>
+    </view>
+    <view class="cu-bar bg-white justify-end">
+      <view class="action">
+        <button class="cu-btn line-blue text-blue" bindtap="hideModal">取消</button>
+        <button class="cu-btn bg-blue margin-left" bindtap="onSubmit">确定</button>
+      </view>
+    </view>
+  </view>
+</view>

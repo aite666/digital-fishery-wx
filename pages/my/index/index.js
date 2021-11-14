@@ -1,72 +1,68 @@
+const app = getApp();
+var HTTP = require("../../../utils/request.js");
+
 Component({
-    options: {
-      addGlobalClass: true,
-    },
-    data: {
-      starCount: 0,
-      forksCount: 0,
-      visitTotal: 0,
-    },
-    attached() {
-      console.log("success")
-      let that = this;
-      wx.showLoading({
-        title: '数据加载中',
-        mask: true,
+  options: {
+    addGlobalClass: true,
+  },
+  data: {
+    userInfo: null,
+    nickName: null,
+    email: null,
+    alertNum: 120,
+  },
+  attached() {
+    console.log("success")
+    console.log(app.globalData.userInfo)
+    this.setData({
+      userInfo: app.globalData.userInfo,
+      nickName: app.globalData.userInfo.nickName,
+      email: app.globalData.userInfo.email,
+    })
+  },
+  methods: {
+    showModal(e) {
+      this.setData({
+        modalName: e.currentTarget.dataset.target
       })
-      let i = 0;
-      numDH();
-      function numDH() {
-        if (i < 20) {
-          setTimeout(function () {
-            that.setData({
-              starCount: i,
-              forksCount: i,
-              visitTotal: i
-            })
-            i++
-            numDH();
-          }, 20)
-        } else {
+    },
+    hideModal(e) {
+      this.setData({
+        modalName: null
+      })
+    },
+    nickNameInput(e) {
+      this.setData({
+        nickName: e.detail.value
+      })
+    },
+    emailInput(e) {
+      this.setData({
+        email: e.detail.value
+      })
+    },
+    onSubmit() {
+      var that = this
+      let url = '/admin/update/' + this.data.userInfo.id
+      this.data.userInfo.nickName = this.data.nickName
+      this.data.userInfo.email = this.data.email
+      HTTP(url, 'post', this.data.userInfo).then((res) => {
+        console.log(res)
+        if (res.code == 200) {
+          app.globalData.userInfo = this.data.userInfo
           that.setData({
-            starCount: that.coutNum(3000),
-            forksCount: that.coutNum(484),
-            visitTotal: that.coutNum(24000)
+            userInfo: that.data.userInfo
+          })
+          wx.showToast({
+            title: '提交成功',
+            icon: 'success',
+            duration: 1500
           })
         }
-      }
-      wx.hideLoading()
-    },
-    methods: {
-      coutNum(e) {
-        if (e > 1000 && e < 10000) {
-          e = (e / 1000).toFixed(1) + 'k'
-        }
-        if (e > 10000) {
-          e = (e / 10000).toFixed(1) + 'W'
-        }
-        return e
-      },
-      CopyLink(e) {
-        wx.setClipboardData({
-          data: e.currentTarget.dataset.link,
-          success: res => {
-            wx.showToast({
-              title: '已复制',
-              duration: 1000,
-            })
-          }
-        })
-      },
-      showModal(e) {
-        this.setData({
-          modalName: e.currentTarget.dataset.target
-        })
-      },
-      hideModal(e) {
-        this.setData({
-          modalName: null
-        })
-      },
+      })
+      this.setData({
+        modalName: null
+      })
     }
-  })
+  }
+})

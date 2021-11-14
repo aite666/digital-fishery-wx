@@ -2,12 +2,34 @@
 let config = require('./pages/js/config.js')
 App({
   config: config,
-  onLaunch: function() {
+  onLaunch: function () {
     // 登录
+    var that = this
     wx.login({
       success: res => {
         console.log(res)
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
+        wx.request({
+          url: config.apiUrl + '/admin/wechat/checkBind',
+          data: {
+            code: res.code
+          },
+          success(res) {
+            // 返回值
+            console.log(res)
+            if (res.data.code == 200) {
+              wx.setStorageSync('token', res.data.data.token)
+              that.globalData.userInfo = res.data.data.umsAdmin;
+              wx.reLaunch({
+                url: '/pages/index/index',
+              });
+            } else {
+              wx.navigateTo({
+                url: "/pages/login/login"
+              })
+            }
+          }
+        })
       }
     })
     // if (wx.cloud) {
@@ -19,12 +41,12 @@ App({
       success: e => {
         this.globalData.StatusBar = e.statusBarHeight;
         let capsule = wx.getMenuButtonBoundingClientRect();
-		if (capsule) {
-		 	this.globalData.Custom = capsule;
-			this.globalData.CustomBar = capsule.bottom + capsule.top - e.statusBarHeight;
-		} else {
-			this.globalData.CustomBar = e.statusBarHeight + 50;
-		}
+        if (capsule) {
+          this.globalData.Custom = capsule;
+          this.globalData.CustomBar = capsule.bottom + capsule.top - e.statusBarHeight;
+        } else {
+          this.globalData.CustomBar = e.statusBarHeight + 50;
+        }
       }
     })
   },

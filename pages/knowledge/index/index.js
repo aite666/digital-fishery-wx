@@ -1,3 +1,7 @@
+var HTTP = require("../../../utils/request.js");
+var util = require('../../../utils/util.js')
+const app = getApp();
+
 Component({
     options: {
         addGlobalClass: true,
@@ -5,23 +9,47 @@ Component({
     data: {
         page: 1,
         per_page: 5,
-        count: 5,
-        totalcount: 15,
-        list: [1, 2, 3, 4, 5],
+        total: 0,
+        newsList: [],
     },
     lifetimes: {
         attached() {
-            this.getList()
+            this.getNewsList()
         },
     },
     methods: {
-        isCard(e) {
-            this.setData({
-                isCard: e.detail.value
+        getNewsList() {
+            var that = this
+            let url = '/news/list?pageNum=' + that.data.page + '&per_page=' + that.data.per_page
+            HTTP(url, 'get', {}).then((res) => {
+                if (res) {
+                    console.log(res.data)
+                    var list = res.data.list
+                    for (let i=0; i<list.length; i++) {
+                        list[i]['createDate'] = util.getDateStr(list[i]['createTime'])
+                    }
+                    that.setData({
+                        newsList: list,
+                        total: res.data.total
+                    })
+                }
             })
         },
-        getList() {
-            console.log('getList')
+        getAddNewsList() {
+            var that = this
+            let url = '/news/list?pageNum=' + that.data.page + '&per_page=' + that.data.per_page
+            HTTP(url, 'get', {}).then((res) => {
+                if (res) {
+                    var list = res.data.list
+                    for (let i=0; i<list.length; i++) {
+                        list[i]['createDate'] = util.getDateStr(list[i]['createTime'])
+                    }
+                    var newsList = that.data.newsList.concat(list)
+                    that.setData({
+                        newsList: newsList
+                    })
+                }
+            })
         },
         scrollHandler() {
             console.log('scrollHandler')
@@ -37,15 +65,8 @@ Component({
                 page: page
             })
             console.log(page);
-            if (that.data.totalcount > that.data.list.length) {
-                for (let i=1;i<per_page + 1;i++) {
-                    that.data.list.push((page - 1)*per_page + i)
-                }
-                that.data.count = that.data.list.length
-                console.log(that.data.list)
-                that.setData({
-                    list: that.data.list
-                })
+            if (that.data.total > that.data.newsList.length) {
+                that.getAddNewsList()
             } else {
                 that.setData({
                     page: page - 1
