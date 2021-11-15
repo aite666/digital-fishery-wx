@@ -1,4 +1,4 @@
-<cu-custom bgColor="bg-gradual-blue" isBack="{{true}}">
+<cu-custom bgColor="bg-gradual-blue">
   <view slot="content">我的</view>
 </cu-custom>
 <scroll-view scroll-y class="scrollPage">
@@ -16,7 +16,7 @@
     </view>
   </view>
   <view class="cu-list menu card-menu margin-top-xl margin-bottom-xl shadow-lg radius">
-    <view class="cu-item {{alertNum>0?'':'arrow'}}">
+    <navigator class="cu-item {{alertNum>0?'':'arrow'}}" url="/pages/my/alarm/alarm">
       <view class="content">
         <text class="cuIcon-notice text-blue"></text>
         <text class="text-grey">告警记录</text>
@@ -24,7 +24,7 @@
       <view class="action" wx:if="alertNum>0">
         <view class="cu-tag round bg-red">{{alertNum>99?"99+":alertNum}}</view>
       </view>
-    </view>
+    </navigator>
     <view class="cu-item arrow">
       <view class="content">
         <text class="cuIcon-footprint text-green"></text>
@@ -37,18 +37,18 @@
         <text class="text-grey">意见反馈</text>
       </button>
     </view>
-    <view class="cu-item arrow">
-      <navigator class="content" url="/pages/my/log/log" hover-class="none">
+    <navigator class="cu-item arrow" url="/pages/my/log/log">
+      <view class="content" hover-class="none">
         <text class="cuIcon-formfill text-green"></text>
         <text class="text-grey">更新日志</text>
-      </navigator>
-    </view>
-    <view class="cu-item arrow">
-      <navigator class="content" url="/pages/my/about/about" hover-class="none">
+      </view>
+    </navigator>
+    <navigator class="cu-item arrow">
+      <view class="content" url="/pages/my/about/about" hover-class="none">
         <image src="/images/logo.jpeg" class="png" mode="aspectFit"></image>
         <text class="text-grey">关于</text>
-      </navigator>
-    </view>
+      </view>
+    </navigator>
   </view>
   <view class="cu-tabbar-height"></view>
 </scroll-view>

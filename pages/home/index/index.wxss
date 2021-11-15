@@ -11,7 +11,7 @@
     margin-bottom: 2px;
 }
 .canvas {
-    height: 150px;
+    height: 170px;
     width: 100%;
 }
 .title-image {
@@ -20,4 +20,7 @@
     vertical-align: middle;
     margin-right: 10px;
     margin-bottom: 2px;
+}
+.title-time {
+    margin-right: 5px;
 }

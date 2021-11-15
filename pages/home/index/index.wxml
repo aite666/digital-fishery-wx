@@ -43,47 +43,22 @@
       </navigator>
     </view>
   </view>
-  <view class="cu-bar bg-white solid-bottom text-black margin-top">
-    <view class="action sub-title">
-      <!-- <text class="cuIcon-titles text-blue"></text>气温 -->
-      <text class="text-gl text-bold text-blue">气温</text>
-      <text class="bg-blue" style="width:2rem"></text>
+  <view wx:for="{{nodeChartList}}" wx:key="index">
+    <view class="cu-bar bg-white solid-bottom text-black margin-top">
+      <view class="action sub-title">
+        <text class="text-gl text-bold text-{{item.color}}">{{item.registerName + '(' + item.deviceAddr + ')'}}</text>
+        <text class="bg-{{item.color}}" style="width:6rem"></text>
+      </view>
+      <view class='action'>
+        <!-- <image src="/images/realtime.png" class="title-image"></image> -->
+        <text class="cuIcon-time text-{{item.color}} title-time"></text>
+        <text>{{item.lastValue}}{{item.unit}}</text>
+      </view>
     </view>
-    <view class='action'>
-      <image src="/images/realtime.png" class="title-image"></image>
-      <text>20°C</text>
+    <view class="bg-white">
+      <canvas class="canvas" canvas-id="chart_{{item.dataKey}}" disable-scroll="true" bindtouchstart="touchHandler"
+      data-key="chart_{{item.dataKey}}"></canvas>
     </view>
-  </view>
-  <view class="bg-white">
-    <canvas canvas-id="lineCanvas" disable-scroll="true" bindtouchstart="touchHandler" class="canvas"></canvas>
-  </view>
-  <view class="cu-bar bg-white solid-bottom text-black margin-top">
-    <view class="action sub-title">
-      <!-- <text class="cuIcon-titles text-blue"></text>PH -->
-      <text class="text-gl text-bold text-orange">PH</text>
-      <text class="bg-orange" style="width:2rem"></text>
-    </view>
-    <view class='action'>
-      <image src="/images/realtime.png" class="title-image"></image>
-      <text>4</text>
-    </view>
-  </view>
-  <view class="bg-white">
-    <canvas canvas-id="lineCanvas2" disable-scroll="true" bindtouchstart="touchHandler2" class="canvas"></canvas>
-  </view>
-  <view class="cu-bar bg-white solid-bottom text-black margin-top">
-    <view class="action sub-title">
-      <!-- <text class="cuIcon-titles text-blue"></text>湿度 -->
-      <text class="text-gl text-bold text-green">湿度</text>
-      <text class="bg-green" style="width:2rem"></text>
-    </view>
-    <view class='action'>
-      <image src="/images/realtime.png" class="title-image"></image>
-      <text>4</text>
-    </view>
-  </view>
-  <view class="bg-white">
-    <canvas canvas-id="lineCanvas3" disable-scroll="true" bindtouchstart="touchHandler3" class="canvas"></canvas>
   </view>
   <view class="cu-tabbar-height"></view>
 </view>

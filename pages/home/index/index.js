@@ -1,6 +1,7 @@
 const app = getApp();
 var wxCharts = require("../../../utils/wxcharts.js");
 var HTTP = require("../../../utils/request.js");
+var util = require('../../../utils/util.js')
 
 Component({
     options: {
@@ -17,17 +18,20 @@ Component({
         batchCount: 0,
         deviceCount: 0,
         fishCount: 0,
-        lineChart: null,
-        lineChart2: null,
-        lineChart3: null,
-        lineChartDict: null,
+        chartDict: {},
+        nodeChartList: [],
+        colorOptions: {
+            '溶解氧': ['purple', '#6739b6'],
+            '水温': ['blue', '#7cb5ec'],
+            'PH': ['orange', '#f37b1d'],
+            '温度': ['olive', '#8dc63f'],
+            '湿度': ['green', '#39b54a'],
+            '其他': ['cyan', '#1cbbb4'],
+        }
     },
     attached() {
         this.getBlockList()
         this.getWeather()
-        this.initCanvas1()
-        this.initCanvas2()
-        this.initCanvas3()
         // let that = this;
         // wx.showLoading({
         //     title: '数据加载中',
@@ -103,6 +107,7 @@ Component({
             })
             this.getProductCategoryList(blockId)
             this.getDeviceNum(blockId)
+            this.getDeviceHistoryData(blockId)
         },
         getProductCategoryList(blockId) {
             var that = this
@@ -145,7 +150,78 @@ Component({
             }
             return e
         },
-        initCanvas(canvasId) {
+        getDeviceHistoryData(blockId) {
+            let params = {
+                startTime: util.formatTime(new Date(new Date().getTime() - 3600 * 1000 * 24 * 30), "yyyy-MM-dd hh:mm:ss"),
+                endTime: util.formatTime(new Date(), "yyyy-MM-dd hh:mm:ss"),
+                blockId: blockId
+            }
+            let url = '/device/node/charts'
+            HTTP(url, 'get', params).then((res) => {
+                if (res) {
+                    console.log(res.data) // 打印查看是否请求到接口数据
+                    let deviceData = {};
+                    for (let item of res.data) {
+                        let deviceAddr = item.deviceAddr;
+                        let nodeId = item.nodeId;
+                        let blockId = item.blockId;
+                        let blockName = item.blockName;
+                        let data = item.data;
+                        for (let subItem of data) {
+                            let recordTime = subItem.recordTime;
+                            let registerId = subItem.registerId;
+                            let registerName = subItem.registerName;
+                            let color = this.data.colorOptions['其他'][0]
+                            if (Object.keys(this.data.colorOptions).indexOf(registerName) > -1) {
+                                color = this.data.colorOptions[registerName][0]
+                            }
+                            let unit = subItem.unit;
+                            let value = subItem.value;
+                            let dataKey = deviceAddr + "#" + nodeId + "#" + registerId;
+                            if (Object.keys(deviceData).indexOf(dataKey) > -1) {
+                                deviceData[dataKey]["data"].push({
+                                    time: recordTime,
+                                    value: value,
+                                })
+                                deviceData[dataKey]['lastValue'] = value
+                            } else {
+                                deviceData[dataKey] = {
+                                    dataKey: dataKey,
+                                    deviceAddr: deviceAddr,
+                                    nodeId: nodeId,
+                                    registerId: registerId,
+                                    registerName: registerName,
+                                    blockId: blockId,
+                                    blockName: blockName,
+                                    unit: unit,
+                                    lastValue: value,
+                                    color: color,
+                                    data: [{
+                                        time: recordTime,
+                                        value: value,
+                                    }, ],
+                                };
+                            }
+                        }
+                    }
+                    console.log(deviceData);
+                    let nodeChartList = Object.values(deviceData);
+                    this.setData({
+                        nodeChartList: nodeChartList
+                    })
+                    setTimeout(() => {
+                        this.initAllChart(nodeChartList)
+                    }, 100)
+                    
+                }
+            })
+        },
+        initAllChart(nodeChartList) {
+            for (let i=0; i<nodeChartList.length; i++) {
+                this.initCanvas(nodeChartList[i])
+            }
+        },
+        initCanvas(data) {
             var windowWidth = 325;
             try {
                 var res = wx.getSystemInfoSync();
@@ -153,245 +229,95 @@ Component({
             } catch (e) {
                 console.error('getSystemInfoSync failed!');
             }
-            console.log(windowWidth)
-            var simulationData = this.createSimulationData();
-            if (!this.lineChartDict) {
-                this.lineChartDict = {
-                    'lineCanvas': null,
-                    'lineCanvas2': null,
-                    'lineCanvas3': null,
+            let categories = []
+            let valueList = []
+            // 这里超过maxNum个点的话就自动稀释
+            let maxNum = 30
+            if (data.data.length < maxNum) {
+                for (let i=0; i<data.data.length; i++) {
+                    let time = data.data[0]['time'].substring(5, 16)
+                    categories.push(time)
+                    valueList.push(data.data[0]['value'])
+                }
+            } else {
+                let ratio = Math.ceil(data.data.length / maxNum);
+                console.log('radio:' + ratio)
+                for (let i=0; i<data.data.length; i++) {
+                    if (i % ratio == 0) {
+                        let time = data.data[0]['time'].substring(5, 16)
+                        categories.push(time)
+                        valueList.push(data.data[0]['value'])
+                    }
                 }
             }
-            console.log(this.lineChartDict)
-            this.lineChartDict[canvasId] = new wxCharts({
+            let canvasId = 'chart_' + data.dataKey
+            let color = this.data.colorOptions['其他'][1]
+            if (Object.keys(this.data.colorOptions).indexOf(data.registerName) > -1) {
+                color = this.data.colorOptions[data.registerName][1]
+            }
+            console.log(data.registerName + color)
+            this.data.chartDict[canvasId] = new wxCharts({
                 canvasId: canvasId,
                 type: 'line',
-                categories: simulationData.categories,
-                animation: true,
-                // background: '#f5f5f5',
-                series: [{
-                    name: '成交量1',
-                    data: simulationData.data,
-                    format: function (val, name) {
-                        return val.toFixed(2) + '万';
-                    }
-                }, {
-                    name: '成交量2',
-                    data: [2, 0, 0, 3, null, 4, 0, 0, 2, 0],
-                    format: function (val, name) {
-                        return val.toFixed(2) + '万';
-                    }
-                }],
-                xAxis: {
-                    disableGrid: true
-                },
-                yAxis: {
-                    title: '成交金额 (万元)',
-                    format: function (val) {
-                        return val.toFixed(2);
-                    },
-                    min: 0
-                },
-                width: windowWidth,
-                height: 150,
-                dataLabel: false,
-                dataPointShape: true,
-                extra: {
-                    lineStyle: 'curve'
-                }
-            }, this);
-        },
-        initCanvas1() {
-            var windowWidth = 325;
-            try {
-                var res = wx.getSystemInfoSync();
-                windowWidth = res.windowWidth + 10;
-            } catch (e) {
-                console.error('getSystemInfoSync failed!');
-            }
-            var simulationData = this.createSimulationData();
-            this.lineChart = new wxCharts({
-                canvasId: 'lineCanvas',
-                type: 'line',
-                categories: simulationData.categories,
-                animation: true,
-                // background: '#f5f5f5',
-                series: [{
-                    name: '成交量1',
-                    data: simulationData.data,
-                    format: function (val, name) {
-                        return val.toFixed(2) + '万';
-                    }
-                }, {
-                    name: '成交量2',
-                    data: [2, 0, 0, 3, null, 4, 0, 0, 2, 0],
-                    format: function (val, name) {
-                        return val.toFixed(2) + '万';
-                    }
-                }],
-                xAxis: {
-                    disableGrid: true
-                },
-                yAxis: {
-                    title: '成交金额 (万元)',
-                    format: function (val) {
-                        return val.toFixed(2);
-                    },
-                    min: 0
-                },
-                width: windowWidth,
-                height: 150,
-                dataLabel: false,
-                dataPointShape: true,
-                extra: {
-                    lineStyle: 'curve'
-                }
-            }, this);
-        },
-        initCanvas2() {
-            var windowWidth = 325;
-            try {
-                var res = wx.getSystemInfoSync();
-                windowWidth = res.windowWidth + 10;
-            } catch (e) {
-                console.error('getSystemInfoSync failed!');
-            }
-            var simulationData = this.createSimulationData();
-            this.lineChart2 = new wxCharts({
-                canvasId: 'lineCanvas2',
-                type: 'line',
-                categories: simulationData.categories,
-                animation: true,
-                // background: '#f5f5f5',
-                series: [{
-                    name: '成交量1',
-                    data: simulationData.data,
-                    format: function (val, name) {
-                        return val.toFixed(2) + '万';
-                    }
-                }, {
-                    name: '成交量2',
-                    data: [2, 0, 0, 3, null, 4, 0, 0, 2, 0],
-                    format: function (val, name) {
-                        return val.toFixed(2) + '万';
-                    }
-                }],
-                xAxis: {
-                    disableGrid: true
-                },
-                yAxis: {
-                    title: '成交金额 (万元)',
-                    format: function (val) {
-                        return val.toFixed(2);
-                    },
-                    min: 0
-                },
-                width: windowWidth,
-                height: 150,
-                dataLabel: false,
-                dataPointShape: true,
-                extra: {
-                    lineStyle: 'curve'
-                }
-            }, this);
-        },
-        initCanvas3() {
-            var windowWidth = 325;
-            try {
-                var res = wx.getSystemInfoSync();
-                windowWidth = res.windowWidth + 10;
-            } catch (e) {
-                console.error('getSystemInfoSync failed!');
-            }
-            var simulationData = this.createSimulationData();
-            this.lineChart3 = new wxCharts({
-                canvasId: 'lineCanvas3',
-                type: 'line',
-                categories: simulationData.categories,
-                animation: true,
-                // background: '#f5f5f5',
-                series: [{
-                    name: '成交量1',
-                    data: simulationData.data,
-                    format: function (val, name) {
-                        return val.toFixed(2) + '万';
-                    }
-                }, {
-                    name: '成交量2',
-                    data: [2, 0, 0, 3, null, 4, 0, 0, 2, 0],
-                    format: function (val, name) {
-                        return val.toFixed(2) + '万';
-                    }
-                }],
-                xAxis: {
-                    disableGrid: true
-                },
-                yAxis: {
-                    title: '成交金额 (万元)',
-                    format: function (val) {
-                        return val.toFixed(2);
-                    },
-                    min: 0
-                },
-                width: windowWidth,
-                height: 150,
-                dataLabel: false,
-                dataPointShape: true,
-                extra: {
-                    lineStyle: 'curve'
-                }
-            }, this);
-        },
-        createSimulationData: function () {
-            var categories = [];
-            var data = [];
-            for (var i = 0; i < 10; i++) {
-                categories.push('2016-' + (i + 1));
-                data.push(Math.random() * (20 - 10) + 10);
-            }
-            // data[4] = null;
-            return {
                 categories: categories,
-                data: data
-            }
+                animation: true,
+                // background: '#f5f5f5',
+                series: [{
+                    name: data.registerName,
+                    data: valueList,
+                    color: color,
+                    format: function (val, name) {
+                        return val.toFixed(2) + data.unit;
+                    }
+                }],
+                xAxis: {
+                    disableGrid: true,
+                },
+                yAxis: {
+                    title: data.registerName + ' (' + data.unit + ')',
+                    format: function (val) {
+                        return val.toFixed(2);
+                    },
+                    min: 0
+                },
+                width: windowWidth,
+                height: 180,
+                dataLabel: false,
+                dataPointShape: true,
+                // enableScroll: true,
+                extra: {
+                    lineStyle: 'curve'
+                }
+            }, this);
         },
         touchHandler: function (e) {
-            // console.log(this.lineChartDict)
-            // let lineChart = this.lineChartDict['lineCanvas']
-            // console.log(lineChart.getCurrentDataIndex(e));
-            console.log(this.lineChart.getCurrentDataIndex(e))
-            this.lineChart.showToolTip(e, {
+            let canvasId = e.target.dataset.key
+            let lineChart = this.data.chartDict[canvasId]
+            // lineChart.scrollStart(e);
+            lineChart.showToolTip(e, {
                 // background: '#7cb5ec',
                 format: function (item, category) {
                     return category + ' ' + item.name + ':' + item.data
                 }
-            });
+            }); 
         },
-        touchHandler2: function (e) {
-            // console.log(this.lineChartDict)
-            // let lineChart = this.lineChartDict['lineCanvas2']
-            // console.log(lineChart.getCurrentDataIndex(e));
-            console.log(this.lineChart2.getCurrentDataIndex(e))
-            this.lineChart2.showToolTip(e, {
-                // background: '#7cb5ec',
-                format: function (item, category) {
-                    return category + ' ' + item.name + ':' + item.data
-                }
-            });
-        },
-        touchHandler3: function (e) {
-            // console.log(this.lineChartDict)
-            // let lineChart = this.lineChartDict['lineCanvas3']
-            // console.log(lineChart)
-            // console.log(lineChart.getCurrentDataIndex(e));
-            console.log(this.lineChart3.getCurrentDataIndex(e))
-            this.lineChart3.showToolTip(e, {
-                // background: '#7cb5ec',
-                format: function (item, category) {
-                    return category + ' ' + item.name + ':' + item.data
-                }
-            });
-        },
+        // moveHandler(e) {
+        //     let canvasId = e.target.dataset.key
+        //     let lineChart = this.data.chartDict[canvasId]
+        //     lineChart.scroll(e);
+        // },
+        // touchEndHandler: function (e) {
+        //     let canvasId = e.target.dataset.key
+        //     let lineChart = this.data.chartDict[canvasId]
+        //     lineChart.scrollEnd(e);
+        //     lineChart.showToolTip(e, {
+        //         // background: '#7cb5ec',
+        //         format: function (item, category) {
+        //             console.log(item)
+        //             return category + ' ' + item.name + ':' + item.data
+        //         }
+        //     });      
+        // },
         blockPickerChange(e) {
             console.log(e);
             let blockId = this.data.blockList[e.detail.value].id

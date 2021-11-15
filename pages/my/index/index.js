@@ -9,7 +9,7 @@ Component({
     userInfo: null,
     nickName: null,
     email: null,
-    alertNum: 120,
+    alertNum: 0,
   },
   attached() {
     console.log("success")
@@ -17,10 +17,20 @@ Component({
     this.setData({
       userInfo: app.globalData.userInfo,
       nickName: app.globalData.userInfo.nickName,
-      email: app.globalData.userInfo.email,
+      email: app.globalData.userInfo.email
     })
+    this.getAlarmNum()
   },
   methods: {
+    getAlarmNum() {
+      let url = '/alarm/count?userId=' + this.data.userInfo.id
+      HTTP(url).then((res) => {
+        console.log(res.data)
+        this.setData({
+          alertNum : res.data
+        })
+      })
+    },
     showModal(e) {
       this.setData({
         modalName: e.currentTarget.dataset.target

@@ -1,0 +1,24 @@
+<cu-custom bgColor="bg-gradual-blue" isBack="{{true}}">
+	<view slot="backText">返回</view>
+	<view slot="content">告警记录</view>
+</cu-custom>
+<view class="cu-bar bg-white solid-bottom margin-top">
+	<view class="action">
+		<text class="cuIcon-titles text-red"></text> 告警记录
+	</view>
+</view>
+<view class="cu-list menu">
+	<view class="cu-item" wx:for="{{alarmList}}" wx:key="index">
+		<view class="content">
+			<view class="text-gray flex" style="margin-bottom: 4px;">
+				<text class="text-bold"></text><text>{{item.description}}</text>
+			</view>
+			<view class="text-gray text-sm flex">
+				<text class="cu-tag round bg-blue">{{item.alarmTime}}</text>
+			</view>
+		</view>
+		<view class="action">
+			<view class="cu-tag round bg-{{item.statusColor}} sm">{{item.statusStr}}</view>
+		</view>
+	</view>
+</view>

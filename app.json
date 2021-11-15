@@ -14,7 +14,8 @@
         "pages/knowledge/index/index",
         "pages/my/index/index",
         "pages/my/about/about",
-        "pages/my/log/log"
+        "pages/my/log/log",
+        "pages/my/alarm/alarm"
     ],
     "window": {
         "navigationBarBackgroundColor": "#39b54a",
