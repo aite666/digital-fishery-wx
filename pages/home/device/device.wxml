@@ -13,6 +13,9 @@
 		<view class="content">
 			<view class="text-grey">{{item.name}}</view>
 			<view class="text-gray text-sm flex">
+				<text class="text-bold">设备:</text><text>{{item.deviceName}}</text>
+			</view>
+			<view class="text-gray text-sm flex">
 				<text class="text-bold">地址码:</text><text>{{item.deviceAddr}}</text>
 			</view>
 			<view class="text-gray text-sm flex">

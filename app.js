@@ -1,6 +1,7 @@
 //app.js
 let config = require('./pages/js/config.js')
 App({
+  require : function($uri){return require($uri)},
   config: config,
   onLaunch: function () {
     // 登录
@@ -16,7 +17,6 @@ App({
           },
           success(res) {
             // 返回值
-            console.log(res)
             if (res.data.code == 200) {
               wx.setStorageSync('token', res.data.data.token)
               that.globalData.userInfo = res.data.data.umsAdmin;

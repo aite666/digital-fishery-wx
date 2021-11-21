@@ -2,6 +2,10 @@
     padding: 50px 10px;
 }
 
+.register-form {
+    padding: 50px 10px;
+}
+
 .cu-bar.btn-group button {
     width: 100%;
     max-width: 100%;
@@ -10,4 +14,18 @@
 .title {
     margin-top: 84px;
     font-size: 32px;
+}
+
+.form-title {
+    padding-left: 15px;
+    color: #646566;
+}
+.form-content {
+    text-align: left !important;
+    padding-left: 71px;
+    color: #ccc;
+    font-size: 16px !important;
+}
+.picked {
+    color: #323233;
 }

@@ -1,3 +1,10 @@
 .cu-list.menu-avatar>.cu-item {
     height: 180rpx;
 }
+
+.fish-image {
+    /* width: 54px;
+    height: 54px; */
+    width: 100%;
+    height: 100%;
+}

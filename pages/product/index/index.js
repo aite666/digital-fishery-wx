@@ -19,7 +19,6 @@ Component({
   },
   methods: {
     tabSelect(e) {
-      console.log(e);
       this.setData({
         TabCur: e.currentTarget.dataset.id,
         scrollLeft: (e.currentTarget.dataset.id - 1) * 60

@@ -25,12 +25,12 @@
         <view class="cu-tag round bg-red">{{alertNum>99?"99+":alertNum}}</view>
       </view>
     </navigator>
-    <view class="cu-item arrow">
+    <navigator class="cu-item arrow" url="/pages/my/inspection/inspection">
       <view class="content">
         <text class="cuIcon-footprint text-green"></text>
         <text class="text-grey">区试巡查</text>
       </view>
-    </view>
+    </navigator>
     <view class="cu-item arrow">
       <button class="cu-btn content" open-type="feedback">
         <text class="cuIcon-writefill text-cyan"></text>
@@ -43,8 +43,8 @@
         <text class="text-grey">更新日志</text>
       </view>
     </navigator>
-    <navigator class="cu-item arrow">
-      <view class="content" url="/pages/my/about/about" hover-class="none">
+    <navigator class="cu-item arrow" url="/pages/my/about/about">
+      <view class="content" hover-class="none">
         <image src="/images/logo.jpeg" class="png" mode="aspectFit"></image>
         <text class="text-grey">关于</text>
       </view>

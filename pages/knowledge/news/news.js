@@ -1,4 +1,6 @@
-var WxParse = require('../../../wxParse/wxParse.js');
+// var WxParse = require('../../../wxParse/wxParse.js');
+const app = getApp();
+const WxParse = app.require('wxParse/wxParse.js');
 var HTTP = require("../../../utils/request.js");
 var util = require('../../../utils/util.js')
 

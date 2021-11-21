@@ -14,7 +14,7 @@
 				<text class="text-bold"></text><text>{{item.description}}</text>
 			</view>
 			<view class="text-gray text-sm flex">
-				<text class="cu-tag round bg-blue">{{item.alarmTime}}</text>
+				<text class="text-bold">{{item.alarmTime}}</text>
 			</view>
 		</view>
 		<view class="action">

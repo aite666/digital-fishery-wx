@@ -1,6 +1,6 @@
 <scroll-view scroll-y class="scrollPage">
 <view>
-  <view class="bg-img padding-tb-xl mybg" style="background-image: url('/images/mybg.jpg');background-size: cover;height: 436rpx;">
+  <view class="bg-img padding-tb-xl mybg" style="background-image: url('http://120.27.195.95:9000/digitalfishery/20211121/mybg.jpg');background-size: cover;height: 436rpx;">
     <view class="padding-xl text-black">
       <view class="padding-xs text-xl text-center">
         <picker bindchange="blockPickerChange" value="{{blockList[blockSelected].id}}" range="{{blockList}}" range-key="name">
@@ -46,7 +46,7 @@
   <view wx:for="{{nodeChartList}}" wx:key="index">
     <view class="cu-bar bg-white solid-bottom text-black margin-top">
       <view class="action sub-title">
-        <text class="text-gl text-bold text-{{item.color}}">{{item.registerName + '(' + item.deviceAddr + ')'}}</text>
+        <text class="text-gl text-bold text-{{item.color}}">{{item.registerName + '(' + item.deviceName + ')'}}</text>
         <text class="bg-{{item.color}}" style="width:6rem"></text>
       </view>
       <view class='action'>
@@ -55,7 +55,7 @@
         <text>{{item.lastValue}}{{item.unit}}</text>
       </view>
     </view>
-    <view class="bg-white">
+    <view class="bg-white" style="height: 170px;">
       <canvas class="canvas" canvas-id="chart_{{item.dataKey}}" disable-scroll="true" bindtouchstart="touchHandler"
       data-key="chart_{{item.dataKey}}"></canvas>
     </view>

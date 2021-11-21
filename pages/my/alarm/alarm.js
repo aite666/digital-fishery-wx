@@ -2,10 +2,6 @@ const app = getApp();
 var HTTP = require("../../../utils/request.js");
 
 Page({
-
-    /**
-     * 页面的初始数据
-     */
     data: {
         alarmList: []
     },

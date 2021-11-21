@@ -27,9 +27,16 @@ Component({
             '温度': ['olive', '#8dc63f'],
             '湿度': ['green', '#39b54a'],
             '其他': ['cyan', '#1cbbb4'],
-        }
+        },
+        windowWidth: 325
     },
     attached() {
+        try {
+            var res = wx.getSystemInfoSync();
+            this.data.windowWidth = res.windowWidth + 10;
+        } catch (e) {
+            console.error('getSystemInfoSync failed!');
+        }
         this.getBlockList()
         this.getWeather()
         // let that = this;
@@ -76,6 +83,7 @@ Component({
                     that.getStats(blockList[0].id)
                     // 这里将blockList放入全局缓存里面
                     wx.setStorageSync('blockList', blockList)
+                    that.getDeviceHistoryData(blockList[0].id)
                 }
             })
         },
@@ -107,7 +115,7 @@ Component({
             })
             this.getProductCategoryList(blockId)
             this.getDeviceNum(blockId)
-            this.getDeviceHistoryData(blockId)
+            // this.getDeviceHistoryData(blockId)
         },
         getProductCategoryList(blockId) {
             var that = this
@@ -163,6 +171,7 @@ Component({
                     let deviceData = {};
                     for (let item of res.data) {
                         let deviceAddr = item.deviceAddr;
+                        let deviceName = item.deviceName;
                         let nodeId = item.nodeId;
                         let blockId = item.blockId;
                         let blockName = item.blockName;
@@ -188,6 +197,7 @@ Component({
                                 deviceData[dataKey] = {
                                     dataKey: dataKey,
                                     deviceAddr: deviceAddr,
+                                    deviceName: deviceName,
                                     nodeId: nodeId,
                                     registerId: registerId,
                                     registerName: registerName,
@@ -204,7 +214,6 @@ Component({
                             }
                         }
                     }
-                    console.log(deviceData);
                     let nodeChartList = Object.values(deviceData);
                     this.setData({
                         nodeChartList: nodeChartList
@@ -222,13 +231,6 @@ Component({
             }
         },
         initCanvas(data) {
-            var windowWidth = 325;
-            try {
-                var res = wx.getSystemInfoSync();
-                windowWidth = res.windowWidth + 10;
-            } catch (e) {
-                console.error('getSystemInfoSync failed!');
-            }
             let categories = []
             let valueList = []
             // 这里超过maxNum个点的话就自动稀释
@@ -256,11 +258,12 @@ Component({
                 color = this.data.colorOptions[data.registerName][1]
             }
             console.log(data.registerName + color)
+            var that = this
             this.data.chartDict[canvasId] = new wxCharts({
                 canvasId: canvasId,
                 type: 'line',
                 categories: categories,
-                animation: true,
+                animation: false,
                 // background: '#f5f5f5',
                 series: [{
                     name: data.registerName,
@@ -280,7 +283,7 @@ Component({
                     },
                     min: 0
                 },
-                width: windowWidth,
+                width: that.data.windowWidth,
                 height: 180,
                 dataLabel: false,
                 dataPointShape: true,
@@ -326,6 +329,16 @@ Component({
                 blockId: blockId,
             })
             this.getStats(blockId)
+            for (let i=0; i< this.data.nodeChartList.length; i++) {
+                let canvasId = 'chart_' + this.data.nodeChartList[i].dataKey
+                this.data.chartDict[canvasId].context.clearRect(0, 0, this.data.windowWidth, 180)
+            }
+            this.setData({
+                nodeChartList: []
+            })
+            setTimeout(() => {
+                this.getDeviceHistoryData(blockId)
+            },500)
         },
     }
 })

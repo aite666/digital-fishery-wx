@@ -144,6 +144,7 @@ Component({
                             'environmentData': that.data.environmentData,
                             'characterDescription': that.data.characterDescription,
                             'images': that.data.imgList.join(','),
+                            'adminId':  app.globalData.userInfo.id,
                             'createUser':  app.globalData.userInfo.nickName,
                         }
                         HTTP(url, 'post', inspectionDetail).then((res) => {

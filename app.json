@@ -1,7 +1,8 @@
 {
     "pages": [
-        "pages/login/login",
+        "pages/launch/index",
         "pages/index/index",
+        "pages/login/login",
         "pages/home/index/index",
         "pages/home/fish/fish",
         "pages/home/device/device",
@@ -15,7 +16,8 @@
         "pages/my/index/index",
         "pages/my/about/about",
         "pages/my/log/log",
-        "pages/my/alarm/alarm"
+        "pages/my/alarm/alarm",
+        "pages/my/inspection/inspection"
     ],
     "window": {
         "navigationBarBackgroundColor": "#39b54a",

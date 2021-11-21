@@ -9,7 +9,10 @@
 </view>
 <view class="cu-list menu-avatar">
 	<view class="cu-item" wx:for="{{batchList}}" wx:key="index">
-		<view class="cu-avatar radius lg bg-{{item.imageColor}}" style="background-image:url('/images/fish/{{item.imageName}}.png');"></view>
+		<!-- <view class="cu-avatar radius lg bg-{{item.imageColor}}" style="background-image:url('/images/fish/{{item.imageName}}.png');"></view> -->
+		<view class="cu-avatar radius lg bg-{{item.imageColor}}">
+			<image class="fish-image" src="/images/fish/{{item.imageName}}.png"></image>
+		</view>
 		<view class="content">
 			<view class="text-grey">{{item.code}} {{item.productCategoryName}}</view>
 			<view class="text-gray text-sm flex">

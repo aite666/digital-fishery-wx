@@ -1,22 +1,22 @@
 <cu-custom bgColor="bg-gradual-blue" isBack="{{false}}">
-	<view slot="content">生产管理</view>
+  <view slot="content">生产管理</view>
 </cu-custom>
 <scroll-view scroll-x class="bg-white nav text-center fixed" style="top:{{CustomBar + 4}}px">
-  <view class="cu-item {{index==TabCur?'text-blue cur':''}}"wx:for="{{tabNav}}" wx:key="index" bindtap="tabSelect" data-id="{{index}}">
+  <view class="cu-item {{index==TabCur?'text-blue cur':''}}" wx:for="{{tabNav}}" wx:key="index" bindtap="tabSelect" data-id="{{index}}">
     {{tabNav[index]}}
   </view>
 </scroll-view>
 <view class="product-content">
   <block wx:if="{{TabCur==0}}">
-<my-inspection></my-inspection>
-</block>
-<block wx:if="{{TabCur==1}}">
-<my-farm></my-farm>
-</block>
-<block wx:if="{{TabCur==2}}">
-<my-storage></my-storage>
-</block>
-<block wx:if="{{TabCur==3}}">
-<my-outpond></my-outpond>
-</block>
+    <my-inspection></my-inspection>
+  </block>
+  <block wx:if="{{TabCur==1}}">
+    <my-farm></my-farm>
+  </block>
+  <block wx:if="{{TabCur==2}}">
+    <my-storage></my-storage>
+  </block>
+  <block wx:if="{{TabCur==3}}">
+    <my-outpond></my-outpond>
+  </block>
 </view>

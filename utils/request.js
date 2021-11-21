@@ -1,4 +1,7 @@
-const API_BASE_URL = 'http://localhost:8080'
+// const API_BASE_URL = 'http://localhost:8080'
+const API_BASE_URL = 'http://120.27.195.95:8080'
+// const API_BASE_URL = 'https://www.qianhan.top'
+const app = getApp();
 
 const REQUEST = (url, method, data = {}, header) => {
   return new Promise((resolve, reject) => {
@@ -21,6 +24,9 @@ const HTTP = (url, method, data, isToken = true) => {
   //isToken请求是否自动带上token值，默认为true
   let header = {
     'Content-Type': 'application/json'
+  }
+  if (method == 'get' && app.globalData.userInfo.blockIds) {
+    data['blockIds'] = app.globalData.userInfo.blockIds
   }
   return new Promise((resolve, reject) => {
     if (isToken) { 

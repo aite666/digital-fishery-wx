@@ -16,23 +16,63 @@
 <scroll-view scroll-y class="scrollPage">
   <!-- <image src='/images/mybg.jpg' mode='widthFix' class='response'>
   </image> -->
-  <view class="bg-img padding-tb-xl mybg" style="background-image: url('/images/mybg.jpg');background-size: cover;height: 260px;">
-      <view class="padding-xs text-center text-shadow title">
-        安吉智慧渔业
-      </view>
+  <view class="bg-img padding-tb-xl mybg" style="background-image: url('http://120.27.195.95:9000/digitalfishery/20211121/mybg.jpg');background-size: cover;height: 260px;">
+    <view class="padding-xs text-center text-shadow title">
+      安吉智慧渔业
+    </view>
   </view>
-  <view class="login-form">
-    <form>
-      <view class="cu-form-group">
-        <van-field model:value="{{ username }}" required clearable label="用户名" placeholder="请输入用户名" />
+  <view class="bg-white nav text-center" style="top: 262px">
+    <view class="flex text-center">
+      <view class="cu-item flex-sub {{index==TabCur?'text-blue cur':''}}" wx:for="{{tabNav}}" wx:key="index" bindtap="tabSelect" data-id="{{index}}">
+        {{tabNav[index]}}
       </view>
-      <view class="cu-form-group">
-        <van-field model:value="{{ password }}" required type="password" label="密码" placeholder="请输入密码" />
-      </view>
-    </form>
+    </view>
   </view>
-  <view class="cu-bar btn-group">
-    <button class="cu-btn bg-gradual-blue shadow-blur lg" bindtap="login">提交</button>
+  <view>
+    <block wx:if="{{TabCur==0}}">
+      <view class="login-form">
+        <form>
+          <view class="cu-form-group">
+            <van-field model:value="{{ username }}" required clearable label="用户名" placeholder="请输入用户名" />
+          </view>
+          <view class="cu-form-group">
+            <van-field model:value="{{ password }}" required type="password" label="密码" placeholder="请输入密码" />
+          </view>
+        </form>
+      </view>
+      <view class="cu-bar btn-group">
+        <button class="cu-btn bg-gradual-blue shadow-blur lg" bindtap="login">登陆</button>
+      </view>
+    </block>
+    <block wx:if="{{TabCur==1}}">
+      <view class="register-form">
+        <form>
+          <view class="cu-form-group">
+            <van-field model:value="{{ registerUsername }}" required clearable label="用户名" placeholder="请输入用户名" />
+          </view>
+          <view class="cu-form-group">
+            <van-field model:value="{{ nickName }}" clearable label="昵称" placeholder="请输入昵称" />
+          </view>
+          <view class="cu-form-group">
+            <van-field model:value="{{ email }}" clearable label="邮箱" placeholder="请输入邮箱" />
+          </view>
+          <view class="cu-form-group">
+            <van-field model:value="{{ registerPassword }}" required type="password" label="密码" placeholder="请输入密码" />
+          </view>
+          <view class="cu-form-group">
+            <view class="form-title">公司</view>
+            <picker bindchange="enterpriseChange" value="{{enterpriseList[enterpriseSelected].id}}" range="{{enterpriseList}}" range-key="name">
+                <view class="form-content picker {{ enterpriseSelected ? 'picked': ''}}">
+                    {{enterpriseSelected ? enterpriseList[enterpriseSelected].name : '请选择公司'}}
+                </view>
+            </picker>
+          </view>
+        </form>
+      </view>
+      <view class="cu-bar btn-group">
+        <button class="cu-btn bg-gradual-blue shadow-blur lg" bindtap="register">注册</button>
+      </view>
+    </block>
   </view>
   <view class='cu-tabbar-height'></view>
 </scroll-view>

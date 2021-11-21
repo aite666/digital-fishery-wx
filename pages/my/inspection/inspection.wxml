@@ -1,0 +1,29 @@
+<cu-custom bgColor="bg-gradual-blue" isBack="{{true}}">
+	<view slot="backText">返回</view>
+	<view slot="content">我的区试巡查</view>
+</cu-custom>
+<view class="cu-bar bg-white solid-bottom margin-top">
+	<view class="action">
+		<text class="cuIcon-titles text-green"></text> 巡查列表
+	</view>
+</view>
+<view class="cu-list menu-avatar">
+	<view class="cu-item" wx:for="{{inspectionList}}" wx:key="index">
+		<view class="cu-avatar lg" style="background-image:url('{{item.image}}');"></view>
+		<view class="content">
+			<view class="text-grey">{{item.blockName}}</view>
+			<view class="text-gray text-sm flex">
+				<text class="text-bold">品种繁育指标数据:</text><text>{{item.productData}}</text>
+			</view>
+			<view class="text-gray text-sm flex">
+				<text class="text-bold">环境数据:</text><text>{{item.environmentData}}</text>
+			</view>
+            <view class="text-gray text-sm flex">
+				<text class="text-bold">品种性状描述:</text><text>{{item.characterDescription}}</text>
+			</view>
+		</view>
+		<view class="action">
+			<view class="cu-tag round bg-grey sm">{{item.inspectionDate}}</view>
+		</view>
+	</view>
+</view>
