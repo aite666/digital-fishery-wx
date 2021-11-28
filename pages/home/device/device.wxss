@@ -1,1 +1,6 @@
-/* pages/home/device/device.wxss */
+.device-image {
+     /* width: 54px;
+    height: 54px; */
+    width: 100%;
+    height: 100%;
+}

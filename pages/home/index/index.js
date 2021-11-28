@@ -109,10 +109,6 @@ Component({
             })
         },
         getStats(blockId) {
-            wx.showLoading({
-                title: '数据加载中',
-                mask: true,
-            })
             this.getProductCategoryList(blockId)
             this.getDeviceNum(blockId)
             // this.getDeviceHistoryData(blockId)
@@ -145,7 +141,6 @@ Component({
                     that.setData({
                         deviceCount: that.countNum(res.data.total)
                     })
-                    wx.hideLoading()
                 }
             })
         },
@@ -159,6 +154,10 @@ Component({
             return e
         },
         getDeviceHistoryData(blockId) {
+            wx.showLoading({
+                title: '数据加载中',
+                mask: true,
+            })
             let params = {
                 startTime: util.formatTime(new Date(new Date().getTime() - 3600 * 1000 * 24 * 30), "yyyy-MM-dd hh:mm:ss"),
                 endTime: util.formatTime(new Date(), "yyyy-MM-dd hh:mm:ss"),
@@ -166,8 +165,8 @@ Component({
             }
             let url = '/device/node/charts'
             HTTP(url, 'get', params).then((res) => {
-                if (res) {
-                    console.log(res.data) // 打印查看是否请求到接口数据
+                console.log(res) // 打印查看是否请求到接口数据
+                if (res && res.data) {
                     let deviceData = {};
                     for (let item of res.data) {
                         let deviceAddr = item.deviceAddr;
@@ -221,8 +220,8 @@ Component({
                     setTimeout(() => {
                         this.initAllChart(nodeChartList)
                     }, 100)
-                    
                 }
+                wx.hideLoading()
             })
         },
         initAllChart(nodeChartList) {
@@ -338,7 +337,7 @@ Component({
             })
             setTimeout(() => {
                 this.getDeviceHistoryData(blockId)
-            },500)
+            },10)
         },
     }
 })
